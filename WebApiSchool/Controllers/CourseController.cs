@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using WebApiSchool.Interfaces.ServiceInterface;
 using WebApiSchool.Models;
@@ -8,6 +9,8 @@ namespace WebApiSchool.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+
+    [Authorize(Roles = "Superadmin,Admin")]
     public class CourseController : ControllerBase
     {
         private readonly IService<Course> _service;
@@ -20,18 +23,19 @@ namespace WebApiSchool.Controllers
 
         [HttpGet(Name = "GetCourse")]
         [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IEnumerable<Course>> GetAll()
         {
             try
             {
-                var course = await _service.GetEntityAllAsync();                
-                return course;
+                return await _service.GetEntityAllAsync();                
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex.Message);
-                return default;
+                throw;
             }
         }
     }
