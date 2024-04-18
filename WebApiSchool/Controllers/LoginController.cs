@@ -40,6 +40,9 @@ namespace WebApiSchool.Controllers
 
                 var key = Encoding.ASCII.GetBytes(_configuration.GetValue<string>("JWTSecret"));
 
+                var user = _userService.GetUserByUsername(model.Username);
+
+
                 if (model.Username == "aa" && model.Password == "aa")
                 {
                     var token = _authService.GenerateJwtToken(model.Username, "Admin");

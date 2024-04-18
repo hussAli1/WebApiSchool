@@ -8,6 +8,8 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using WebApiSchool.Repository.Interfaces;
+using Microsoft.AspNetCore.Authorization;
+using WebApiSchool.DTO;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -53,10 +55,26 @@ builder.Services.AddSwaggerGen(options =>
 
 
 
+var permissions = new List<string>
+    {
+        CustomPermissions.GetCourseById,
+        CustomPermissions.GetCourse,
+    };
+
+foreach (var permission in permissions)
+{
+    builder.Services.AddAuthorization(options =>
+    {
+        options.AddPolicy($"{permission}Policy", policy =>
+            policy.Requirements.Add(new CustomAuthorizationRequirement(permission)));
+    });
+}
+
 
 builder.Services.AddTransient<IMyLogger, LogToFile>();
 builder.Services.AddScoped(typeof(IRepository<>), typeof(BaseRepository<>));
 builder.Services.AddTransient<AuthService>();
+builder.Services.AddSingleton<IAuthorizationHandler, CustomAuthorizationHandler>();
 
 
 

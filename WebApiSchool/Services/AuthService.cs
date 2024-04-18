@@ -7,6 +7,7 @@ using WebApiSchool.MyLogger;
 
 namespace WebApiSchool.Services
 {
+
     public class AuthService
     {
         private readonly IConfiguration _configuration;

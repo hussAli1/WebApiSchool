@@ -12,7 +12,9 @@ namespace WebApiSchool.DataAccess
         }
 
         public DbSet<Course> Courses { get; set; }
-
+        public DbSet<User> Users { get; set; }
+        public DbSet<PermissionGroup> PermissionGroups { get; set; }
+        public DbSet<GroupPermission> GroupPermissions { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
