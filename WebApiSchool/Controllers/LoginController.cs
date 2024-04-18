@@ -7,9 +7,8 @@ using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using WebApiSchool.DataAccess.Models;
 using WebApiSchool.DTO;
-using WebApiSchool.Interfaces.ServiceInterface;
-using WebApiSchool.Models;
 using WebApiSchool.MyLogger;
 using WebApiSchool.Services;
 
@@ -20,13 +19,11 @@ namespace WebApiSchool.Controllers
     [AllowAnonymous]
     public class LoginController : ControllerBase
     {
-        private readonly IService<Course> _service;
         private readonly IMyLogger _logger;
         private readonly IConfiguration _configuration;
         private readonly AuthService _authService;
-        public LoginController(IService<Course> service, IMyLogger logger, IConfiguration configuration, AuthService authService)
+        public LoginController(IMyLogger logger, IConfiguration configuration, AuthService authService)
         {
-            _service = service;
             _logger = logger;
             _configuration = configuration;
             _authService = authService;

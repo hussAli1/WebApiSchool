@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using WebApiSchool.DataAccess.Config;
-using WebApiSchool.Models;
+using WebApiSchool.DataAccess.Models;
 
 namespace WebApiSchool.DataAccess
 {

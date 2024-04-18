@@ -1,14 +1,13 @@
 using Microsoft.EntityFrameworkCore;
 using WebApiSchool.DataAccess;
 using WebApiSchool.Repository;
-using WebApiSchool.Interfaces.RepositoryInterface;
-using WebApiSchool.Interfaces.ServiceInterface;
 using WebApiSchool.Services;
 using WebApiSchool.MyLogger;
 using Microsoft.OpenApi.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using WebApiSchool.Repository.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -57,7 +56,6 @@ builder.Services.AddSwaggerGen(options =>
 
 builder.Services.AddTransient<IMyLogger, LogToFile>();
 builder.Services.AddScoped(typeof(IRepository<>), typeof(BaseRepository<>));
-builder.Services.AddScoped(typeof(IService<>), typeof(BaseService<>));
 builder.Services.AddTransient<AuthService>();
 
 

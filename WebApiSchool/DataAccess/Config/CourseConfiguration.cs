@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using WebApiSchool.Models;
+using WebApiSchool.DataAccess.Models;
 
 namespace WebApiSchool.DataAccess.Config
 {

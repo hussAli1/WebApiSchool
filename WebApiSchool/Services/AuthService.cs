@@ -18,7 +18,6 @@ namespace WebApiSchool.Services
             _configuration = configuration;
             _key = Encoding.ASCII.GetBytes(_configuration.GetValue<string>("JWTSecret"));
             _logger = logger;
-
         }
 
         public string GenerateJwtToken(string username, string role)

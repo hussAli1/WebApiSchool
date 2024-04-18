@@ -1,4 +1,4 @@
-﻿namespace WebApiSchool.Models
+﻿namespace WebApiSchool.DataAccess.Models
 {
     public class Course
     {

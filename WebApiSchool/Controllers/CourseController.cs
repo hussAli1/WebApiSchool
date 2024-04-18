@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using WebApiSchool.Interfaces.ServiceInterface;
-using WebApiSchool.Models;
+using WebApiSchool.DataAccess.Models;
 using WebApiSchool.MyLogger;
+using WebApiSchool.Repository.Interfaces;
 
 namespace WebApiSchool.Controllers
 {
@@ -13,11 +13,11 @@ namespace WebApiSchool.Controllers
     [Authorize(Roles = "Superadmin,Admin")]
     public class CourseController : ControllerBase
     {
-        private readonly IService<Course> _service;
+        private readonly IRepository<Course> _repository;
         private readonly IMyLogger _logger;
-        public CourseController(IService<Course> service , IMyLogger logger)
+        public CourseController(IRepository<Course> repository, IMyLogger logger)
         {
-            _service = service;
+            _repository = repository;
             _logger = logger;
         }
 
@@ -30,7 +30,7 @@ namespace WebApiSchool.Controllers
         {
             try
             {
-                return await _service.GetEntityAllAsync();                
+                return await _repository.GetAllAsync();                
             }
             catch (Exception ex)
             {

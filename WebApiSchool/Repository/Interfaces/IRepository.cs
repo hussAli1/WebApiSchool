@@ -1,6 +1,6 @@
 ﻿using System.Linq.Expressions;
 
-namespace WebApiSchool.Interfaces.RepositoryInterface
+namespace WebApiSchool.Repository.Interfaces
 {
     public interface IRepository<TEntity>
     {

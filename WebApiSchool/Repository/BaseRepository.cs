@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 using WebApiSchool.DataAccess;
-using WebApiSchool.Interfaces.RepositoryInterface;
+using WebApiSchool.Repository.Interfaces;
 
 namespace WebApiSchool.Repository
 {
