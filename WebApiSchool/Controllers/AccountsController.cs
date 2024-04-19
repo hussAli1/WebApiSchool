@@ -11,25 +11,29 @@ using WebApiSchool.DataAccess.Models;
 using WebApiSchool.DTO;
 using WebApiSchool.MyLogger;
 using WebApiSchool.Services;
+using WebApiSchool.Services.Interfaces;
 
 namespace WebApiSchool.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
     [AllowAnonymous]
-    public class LoginController : ControllerBase
+    public class AccountsController : ControllerBase
     {
         private readonly IMyLogger _logger;
         private readonly IConfiguration _configuration;
+        private readonly IUserService _userService;
         private readonly AuthService _authService;
-        public LoginController(IMyLogger logger, IConfiguration configuration, AuthService authService)
+
+        public AccountsController(IMyLogger logger, IUserService userService, IConfiguration configuration, AuthService authService)
         {
             _logger = logger;
             _configuration = configuration;
             _authService = authService;
+            _userService = userService;
         }
         [HttpPost]
-        public ActionResult Login(LoginDTO model)
+        public async Task<ActionResult> Login(LoginDTO model)
         {
             try
             {
@@ -40,12 +44,11 @@ namespace WebApiSchool.Controllers
 
                 var key = Encoding.ASCII.GetBytes(_configuration.GetValue<string>("JWTSecret"));
 
-                var user = _userService.GetUserByUsername(model.Username);
+                var user = await _userService.LoginUserAsync(model.Username, model.Password);
 
-
-                if (model.Username == "aa" && model.Password == "aa")
+                if (user != null)
                 {
-                    var token = _authService.GenerateJwtToken(model.Username, "Admin");
+                    var token = _authService.GenerateJwtToken(model.Username, user.PermissionGroup.Name);
 
                     var response = new LoginResponseDTO
                     {

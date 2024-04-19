@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using WebApiSchool.DataAccess.Models;
+using WebApiSchool.DTO;
 using WebApiSchool.MyLogger;
 using WebApiSchool.Repository.Interfaces;
 
@@ -22,6 +23,7 @@ namespace WebApiSchool.Controllers
         }
 
         [HttpGet(Name = "GetCourse")]
+        [Authorize(Roles = CustomRoles.Admin)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
