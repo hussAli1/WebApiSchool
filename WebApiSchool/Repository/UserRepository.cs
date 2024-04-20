@@ -16,7 +16,7 @@ namespace WebApiSchool.Repository
         public async Task<User> LoginUserAsync(string userNmae, string password)
         {
             return await _dbContext.Users.Include(u => u.PermissionGroup)
-                                      .FirstOrDefaultAsync(u => u.Username == userNmae && u.PasswordHash == password);
+                                         .FirstOrDefaultAsync(u => u.Username == userNmae && u.Password == password);
         }
     }
 }

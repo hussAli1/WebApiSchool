@@ -44,7 +44,7 @@ namespace WebApiSchool.Migrations
                     b.HasData(
                         new
                         {
-                            GUID = new Guid("72bef083-0da9-43d4-9745-8e4c25a9b087"),
+                            GUID = new Guid("67d98a32-ed8c-4888-9d7a-554e2a85a2b2"),
                             CourseName = "HCi",
                             Price = 100m
                         });
@@ -64,6 +64,20 @@ namespace WebApiSchool.Migrations
                     b.HasKey("PermissionGroupId", "PermissionName");
 
                     b.ToTable("GroupPermissions");
+
+                    b.HasData(
+                        new
+                        {
+                            PermissionGroupId = 1,
+                            PermissionName = "GetCourse",
+                            Id = 1
+                        },
+                        new
+                        {
+                            PermissionGroupId = 2,
+                            PermissionName = "GetCourseById",
+                            Id = 2
+                        });
                 });
 
             modelBuilder.Entity("WebApiSchool.DataAccess.Models.PermissionGroup", b =>
@@ -81,6 +95,18 @@ namespace WebApiSchool.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("PermissionGroups");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "Admin"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "User"
+                        });
                 });
 
             modelBuilder.Entity("WebApiSchool.DataAccess.Models.User", b =>
@@ -91,7 +117,7 @@ namespace WebApiSchool.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("PasswordHash")
+                    b.Property<string>("Password")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -107,6 +133,22 @@ namespace WebApiSchool.Migrations
                     b.HasIndex("PermissionGroupId");
 
                     b.ToTable("Users");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Password = "11",
+                            PermissionGroupId = 1,
+                            Username = "11"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Password = "22",
+                            PermissionGroupId = 2,
+                            Username = "22"
+                        });
                 });
 
             modelBuilder.Entity("WebApiSchool.DataAccess.Models.GroupPermission", b =>

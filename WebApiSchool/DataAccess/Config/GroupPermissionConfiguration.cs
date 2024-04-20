@@ -15,19 +15,21 @@ namespace WebApiSchool.DataAccess.Config
                    .WithMany(pg => pg.GroupPermissions)
                    .HasForeignKey(gp => gp.PermissionGroupId);
 
-        //    builder.HasData(new List<GroupPermission>
-        //{
-        //    new GroupPermission
-        //    {
-        //        PermissionGroupId = 1,
-        //        PermissionName = "GetCourse"
-        //    },
-        //    new GroupPermission
-        //    {
-        //        PermissionGroupId = 2,
-        //        PermissionName = "GetCourseById"
-        //    },
-        //});
+            builder.HasData(new List<GroupPermission>
+        {
+            new GroupPermission
+            {
+                Id=1,
+                PermissionGroupId = 1,
+                PermissionName = "GetCourse"
+            },
+            new GroupPermission
+            {
+                Id = 2,
+                PermissionGroupId = 2,
+                PermissionName = "GetCourseById"
+            },
+        });
         }
     }
 }

@@ -1,6 +1,8 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Net;
 using WebApiSchool.DataAccess.Models;
 using WebApiSchool.DTO;
 using WebApiSchool.MyLogger;
@@ -16,10 +18,17 @@ namespace WebApiSchool.Controllers
     {
         private readonly IRepository<Course> _repository;
         private readonly IMyLogger _logger;
-        public CourseController(IRepository<Course> repository, IMyLogger logger)
+        private APIResponse _apiResponse;
+        private readonly IMapper _mapper;
+
+        public CourseController(IRepository<Course> repository,
+            IMyLogger logger, IMapper mapper ,APIResponse apiResponse)
         {
             _repository = repository;
             _logger = logger;
+            _apiResponse = apiResponse;
+            _mapper = mapper;
+
         }
 
         [HttpGet(Name = "GetCourse")]
@@ -28,16 +37,23 @@ namespace WebApiSchool.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IEnumerable<Course>> GetAll()
+        public async Task<ActionResult<APIResponse>> GetAll()
         {
             try
             {
-                return await _repository.GetAllAsync();                
+                var courses = await _repository.GetAllAsync();
+                _apiResponse.Data = _mapper.Map<List<CourseDTO>>(courses);
+                _apiResponse.Status = true;
+                _apiResponse.StatusCode = HttpStatusCode.OK;
+                return Ok(_apiResponse);
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex.Message);
-                throw;
+                _apiResponse.Errors.Add(ex.Message);
+                _apiResponse.StatusCode = HttpStatusCode.InternalServerError;
+                _apiResponse.Status = false;
+                return _apiResponse;
             }
         }
     }

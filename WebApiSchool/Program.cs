@@ -11,6 +11,7 @@ using WebApiSchool.Repository.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using WebApiSchool.DTO;
 using WebApiSchool.Services.Interfaces;
+using WebApiSchool.Configurations;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -55,7 +56,8 @@ builder.Services.AddSwaggerGen(options =>
 });
 
 
-
+builder.Services.AddAutoMapper(typeof(AutoMapperConfig));
+builder.Services.AddScoped<APIResponse>();
 builder.Services.AddTransient<IMyLogger, LogToFile>();
 builder.Services.AddScoped(typeof(IRepository<>), typeof(BaseRepository<>));
 builder.Services.AddScoped(typeof(IServices<>), typeof(BaseServices<>));

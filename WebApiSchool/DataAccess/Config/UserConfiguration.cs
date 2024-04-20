@@ -14,23 +14,23 @@ namespace WebApiSchool.DataAccess.Config
                    .WithMany(pg => pg.Users)
                    .HasForeignKey(u => u.PermissionGroupId);
 
-        //    builder.HasData(new List<User>
-        //{
-        //    new User
-        //    {
-        //        Id = 1,
-        //        Username = "11",
-        //        PasswordHash = "11",
-        //        PermissionGroupId = 1
-        //    },
-        //    new User
-        //    {
-        //        Id = 2,
-        //        Username = "22",
-        //        PasswordHash = "22", 
-        //        PermissionGroupId = 2
-        //    },
-        //});
+            builder.HasData(new List<User>
+        {
+            new User
+            {
+                Id = 1,
+                Username = "11",
+                Password = "11",
+                PermissionGroupId = 1
+            },
+            new User
+            {
+                Id = 2,
+                Username = "22",
+                Password = "22",
+                PermissionGroupId = 2
+            },
+        });
         }
     }
 }
