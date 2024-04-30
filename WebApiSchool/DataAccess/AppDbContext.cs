@@ -15,11 +15,25 @@ namespace WebApiSchool.DataAccess
         public DbSet<User> Users { get; set; }
         public DbSet<PermissionGroup> PermissionGroups { get; set; }
         public DbSet<GroupPermission> GroupPermissions { get; set; }
+        public DbSet<Office> Offices { get; set; }
+        public DbSet<Instructor> Instructors { get; set; }
+        public DbSet<Section> Sections { get; set; }
+        public DbSet<Schedule> Schedules { get; set; }
+        public DbSet<Participant> Particpants { get; set; }
+        public DbSet<Enrollment> Enrollments { get; set; }
+        public DbSet<Review> Reviews { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
 
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(CourseConfiguration).Assembly);
+        }
+        protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
+        {
+            base.ConfigureConventions(configurationBuilder);
+            configurationBuilder.Properties<DateOnly>()
+                .HaveConversion<DateOnlyConverter>()
+                .HaveColumnType("date");
         }
     }
 }
