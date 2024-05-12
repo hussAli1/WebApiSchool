@@ -2,8 +2,8 @@
 {
     public class Enrollment
     {
-        public int SectionId { get; set; }
-        public int ParticipantId { get; set; }
+        public Guid SectionGUID { get; set; }
+        public Guid ParticipantGUID { get; set; }
 
         public Section Section { get; set; } = null!;
         public Participant Participant { get; set; } = null!;

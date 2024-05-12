@@ -3,11 +3,11 @@
     public class Section : Entity
     {
         public string? SectionName { get; set; }
-        public int CourseId { get; set; }
+        public Guid CourseGUID { get; set; }
         public Course? Course { get; set; }
-        public int InstructorId { get; set; }
+        public Guid InstructorGUID { get; set; }
         public Instructor? Instructor { get; set; }
-        public int ScheduleId { get; set; }
+        public Guid ScheduleGUID { get; set; }
         public Schedule? Schedule { get; set; }
         public DateRange DateRange { get; set; } = new();
         public TimeSlot TimeSlot { get; set; } = new();

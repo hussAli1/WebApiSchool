@@ -7,7 +7,7 @@
 
         public override string ToString()
         {
-            return $"{Id}  | {LName}, {FName} | ({JobTitle}) at {Company}";
+            return $"{GUID}  | {LName}, {FName} | ({JobTitle}) at {Company}";
         }
     }
 }

@@ -9,8 +9,8 @@ namespace WebApiSchool.DataAccess.Config
     {
         public void Configure(EntityTypeBuilder<Section> builder)
         {
-            builder.HasKey(x=>x.Id);
-            builder.Property(x => x.Id).ValueGeneratedNever();
+            builder.HasKey(x=>x.GUID);
+            builder.Property(x => x.GUID).ValueGeneratedNever();
 
 
             builder.Property(x => x.SectionName)
@@ -20,7 +20,7 @@ namespace WebApiSchool.DataAccess.Config
 
             builder.HasOne(x => x.Course)
                 .WithMany(x => x.Sections)
-                .HasForeignKey(x => x.CourseId)
+                .HasForeignKey(x => x.CourseGUID)
                 .IsRequired();
 
             builder.OwnsOne(x => x.TimeSlot, ts =>
@@ -37,12 +37,12 @@ namespace WebApiSchool.DataAccess.Config
 
             builder.HasOne(x => x.Schedule)
                 .WithMany(x => x.Sections)
-                .HasForeignKey(x=>x.ScheduleId)
+                .HasForeignKey(x=>x.ScheduleGUID)
                 .IsRequired();
 
             builder.HasOne(x => x.Instructor)
                 .WithMany(x => x.Sections)
-                .HasForeignKey(x => x.InstructorId)
+                .HasForeignKey(x => x.InstructorGUID)
                 .IsRequired(false);
 
             builder.HasMany(x => x.Participants)

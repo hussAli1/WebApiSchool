@@ -9,19 +9,19 @@ namespace WebApiSchool.DataAccess.Config
         public void Configure(EntityTypeBuilder<PermissionGroup> builder)
         {
 
-            builder.HasData(new List<PermissionGroup>
-            {
-                new PermissionGroup
-                {
-                    Id = 1,
-                    Name = "Admin"
-                },
-                new PermissionGroup
-                {
-                    Id = 2,
-                    Name = "User"
-                },
-            });
+            //builder.HasData(new List<PermissionGroup>
+            //{
+            //    new PermissionGroup
+            //    {
+            //        Id = 1,
+            //        Name = "Admin"
+            //    },
+            //    new PermissionGroup
+            //    {
+            //        Id = 2,
+            //        Name = "User"
+            //    },
+            //});
         }
     }
 }

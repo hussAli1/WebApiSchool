@@ -5,7 +5,7 @@ namespace WebApiSchool.DataAccess.Models
     public class PermissionGroup
     {
         [Key]
-        public int Id { get; set; }
+        public Guid GUID { get; set; }
 
         public string Name { get; set; }
 

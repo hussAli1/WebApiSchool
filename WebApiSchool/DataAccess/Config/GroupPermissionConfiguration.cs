@@ -9,27 +9,27 @@ namespace WebApiSchool.DataAccess.Config
     {
         public void Configure(EntityTypeBuilder<GroupPermission> builder)
         {
-            builder.HasKey(gp => new { gp.PermissionGroupId, gp.PermissionName });
+            builder.HasKey(gp => new { gp.PermissionGroupGUID, gp.PermissionName });
 
             builder.HasOne(gp => gp.PermissionGroup)
                    .WithMany(pg => pg.GroupPermissions)
-                   .HasForeignKey(gp => gp.PermissionGroupId);
+                   .HasForeignKey(gp => gp.PermissionGroupGUID);
 
-            builder.HasData(new List<GroupPermission>
-        {
-            new GroupPermission
-            {
-                Id=1,
-                PermissionGroupId = 1,
-                PermissionName = "GetCourse"
-            },
-            new GroupPermission
-            {
-                Id = 2,
-                PermissionGroupId = 2,
-                PermissionName = "GetCourseById"
-            },
-        });
+        //    builder.HasData(new List<GroupPermission>
+        //{
+        //    new GroupPermission
+        //    {
+        //        GUID=1,
+        //        PermissionGroupGUID = 1,
+        //        PermissionName = "GetCourse"
+        //    },
+        //    new GroupPermission
+        //    {
+        //        Id = 2,
+        //        PermissionGroupId = 2,
+        //        PermissionName = "GetCourseById"
+        //    },
+        //});
         }
     }
 }

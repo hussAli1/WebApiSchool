@@ -21,16 +21,15 @@ namespace WebApiSchool.DataAccess.Config
 
             builder.ToTable("Courses");
 
-            builder.HasData(new List<Course>()
-            {
-                new Course
-                {
-                    GUID = Guid.NewGuid(),
-                    CourseName = "HCi",
-                    Price = 100m
-                }
-            });
-
+            //builder.HasData(new List<Course>()
+            //{
+            //    new Course
+            //    {
+            //        GUID = Guid.NewGuid(),
+            //        CourseName = "HCi",
+            //        Price = 100m
+            //    }
+            //});
         }
     }
 }

@@ -2,6 +2,6 @@
 {
     public abstract class Entity
     {
-        public int Id { get; set; }
+        public Guid GUID { get; set; }
     }
 }

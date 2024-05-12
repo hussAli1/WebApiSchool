@@ -1,8 +1,7 @@
 ﻿namespace WebApiSchool.DataAccess.Models
 {
-    public class Course
+    public class Course:Entity
     {
-        public Guid GUID { get; set; }
         public string CourseName { get; set; }
         public decimal Price { get; set; }
         public ICollection<Section> Sections { get; set; } = new List<Section>();
@@ -12,7 +11,7 @@
     {
         public string Feedback { get; set; }
 
-        public int CourseId { get; set; }
+        public Guid CourseGUID { get; set; }
 
         public Course Course { get; set; }
 
