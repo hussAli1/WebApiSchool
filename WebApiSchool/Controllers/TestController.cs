@@ -14,15 +14,15 @@ namespace WebApiSchool.Controllers
     [ApiController]
 
     [Authorize(Roles = "admin,user")]
-    public class CourseController : ControllerBase
+    public class TestController : ControllerBase
     {
         private readonly IRepository<Course> _repository;
         private readonly IMyLogger _logger;
         private APIResponse _apiResponse;
         private readonly IMapper _mapper;
 
-        public CourseController(IRepository<Course> repository,
-            IMyLogger logger, IMapper mapper ,APIResponse apiResponse)
+        public TestController(IRepository<Course> repository,
+            IMyLogger logger, IMapper mapper, APIResponse apiResponse)
         {
             _repository = repository;
             _logger = logger;
@@ -41,8 +41,8 @@ namespace WebApiSchool.Controllers
         {
             try
             {
-                var courses = await _repository.GetAllAsync();
-                _apiResponse.Data = _mapper.Map<List<CourseDTO>>(courses);
+                object ob = new { id = 2 , name = "Ali" , city = "a1" };
+                _apiResponse.Data = ob;
                 _apiResponse.Status = true;
                 _apiResponse.StatusCode = HttpStatusCode.OK;
                 return Ok(_apiResponse);

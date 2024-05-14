@@ -64,6 +64,8 @@ builder.Services.AddScoped(typeof(IServices<>), typeof(BaseServices<>));
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddTransient<AuthService>();
+builder.Services.AddMemoryCache();
+builder.Services.AddSingleton<ICacheManagement, CacheManagement>();
 builder.Services.AddSingleton<IAuthorizationHandler, CustomAuthorizationHandler>();
 
 

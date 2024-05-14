@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace WebApiSchool.Migrations
 {
     /// <inheritdoc />
-    public partial class creatDb : Migration
+    public partial class createdb : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -160,26 +160,6 @@ namespace WebApiSchool.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "GroupPermissions",
-                columns: table => new
-                {
-                    PermissionGroupGUID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    PermissionName = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    GUID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    PermissionGroupId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_GroupPermissions", x => new { x.PermissionGroupGUID, x.PermissionName });
-                    table.ForeignKey(
-                        name: "FK_GroupPermissions_PermissionGroups_PermissionGroupGUID",
-                        column: x => x.PermissionGroupGUID,
-                        principalTable: "PermissionGroups",
-                        principalColumn: "GUID",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Users",
                 columns: table => new
                 {
@@ -306,9 +286,6 @@ namespace WebApiSchool.Migrations
 
             migrationBuilder.DropTable(
                 name: "Enrollments");
-
-            migrationBuilder.DropTable(
-                name: "GroupPermissions");
 
             migrationBuilder.DropTable(
                 name: "Individuals");

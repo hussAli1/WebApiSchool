@@ -57,25 +57,6 @@ namespace WebApiSchool.Migrations
                     b.ToTable("Enrollments", (string)null);
                 });
 
-            modelBuilder.Entity("WebApiSchool.DataAccess.Models.GroupPermission", b =>
-                {
-                    b.Property<Guid>("PermissionGroupGUID")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("PermissionName")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<Guid>("GUID")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<int>("PermissionGroupId")
-                        .HasColumnType("int");
-
-                    b.HasKey("PermissionGroupGUID", "PermissionName");
-
-                    b.ToTable("GroupPermissions");
-                });
-
             modelBuilder.Entity("WebApiSchool.DataAccess.Models.Instructor", b =>
                 {
                     b.Property<Guid>("GUID")
@@ -323,17 +304,6 @@ namespace WebApiSchool.Migrations
                     b.Navigation("Section");
                 });
 
-            modelBuilder.Entity("WebApiSchool.DataAccess.Models.GroupPermission", b =>
-                {
-                    b.HasOne("WebApiSchool.DataAccess.Models.PermissionGroup", "PermissionGroup")
-                        .WithMany("GroupPermissions")
-                        .HasForeignKey("PermissionGroupGUID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("PermissionGroup");
-                });
-
             modelBuilder.Entity("WebApiSchool.DataAccess.Models.Instructor", b =>
                 {
                     b.HasOne("WebApiSchool.DataAccess.Models.Office", "Office")
@@ -475,8 +445,6 @@ namespace WebApiSchool.Migrations
 
             modelBuilder.Entity("WebApiSchool.DataAccess.Models.PermissionGroup", b =>
                 {
-                    b.Navigation("GroupPermissions");
-
                     b.Navigation("Users");
                 });
 

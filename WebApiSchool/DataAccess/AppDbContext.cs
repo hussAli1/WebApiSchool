@@ -14,7 +14,7 @@ namespace WebApiSchool.DataAccess
         public DbSet<Course> Courses { get; set; }
         public DbSet<User> Users { get; set; }
         public DbSet<PermissionGroup> PermissionGroups { get; set; }
-        public DbSet<GroupPermission> GroupPermissions { get; set; }
+        //public DbSet<GroupPermission> GroupPermissions { get; set; }
         public DbSet<Office> Offices { get; set; }
         public DbSet<Instructor> Instructors { get; set; }
         public DbSet<Section> Sections { get; set; }

@@ -13,13 +13,13 @@ namespace WebApiSchool.DataAccess.Config
             //{
             //    new PermissionGroup
             //    {
-            //        Id = 1,
-            //        Name = "Admin"
+            //        GUID = Guid.Parse("0E9F9C94-1437-4FF9-8D12-0000FE93FD71"),
+            //        Name = "admin"
             //    },
             //    new PermissionGroup
             //    {
-            //        Id = 2,
-            //        Name = "User"
+            //        GUID = Guid.Parse("F9F68922-9C6D-4142-BC8C-000AB06B5AB3"),
+            //        Name = "user"
             //    },
             //});
         }

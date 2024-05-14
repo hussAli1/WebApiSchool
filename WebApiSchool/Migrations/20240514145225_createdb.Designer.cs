@@ -12,8 +12,8 @@ using WebApiSchool.DataAccess;
 namespace WebApiSchool.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240503163120_creatDb")]
-    partial class creatDb
+    [Migration("20240514145225_createdb")]
+    partial class createdb
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -58,25 +58,6 @@ namespace WebApiSchool.Migrations
                     b.HasIndex("ParticipantGUID");
 
                     b.ToTable("Enrollments", (string)null);
-                });
-
-            modelBuilder.Entity("WebApiSchool.DataAccess.Models.GroupPermission", b =>
-                {
-                    b.Property<Guid>("PermissionGroupGUID")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("PermissionName")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<Guid>("GUID")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<int>("PermissionGroupId")
-                        .HasColumnType("int");
-
-                    b.HasKey("PermissionGroupGUID", "PermissionName");
-
-                    b.ToTable("GroupPermissions");
                 });
 
             modelBuilder.Entity("WebApiSchool.DataAccess.Models.Instructor", b =>
@@ -326,17 +307,6 @@ namespace WebApiSchool.Migrations
                     b.Navigation("Section");
                 });
 
-            modelBuilder.Entity("WebApiSchool.DataAccess.Models.GroupPermission", b =>
-                {
-                    b.HasOne("WebApiSchool.DataAccess.Models.PermissionGroup", "PermissionGroup")
-                        .WithMany("GroupPermissions")
-                        .HasForeignKey("PermissionGroupGUID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("PermissionGroup");
-                });
-
             modelBuilder.Entity("WebApiSchool.DataAccess.Models.Instructor", b =>
                 {
                     b.HasOne("WebApiSchool.DataAccess.Models.Office", "Office")
@@ -478,8 +448,6 @@ namespace WebApiSchool.Migrations
 
             modelBuilder.Entity("WebApiSchool.DataAccess.Models.PermissionGroup", b =>
                 {
-                    b.Navigation("GroupPermissions");
-
                     b.Navigation("Users");
                 });
 

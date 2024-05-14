@@ -11,6 +11,6 @@ namespace WebApiSchool.DataAccess.Models
 
         public ICollection<User> Users { get; set; }  
 
-        public ICollection<GroupPermission> GroupPermissions { get; set; }
+        //public ICollection<GroupPermission> GroupPermissions { get; set; }
     }
 }
