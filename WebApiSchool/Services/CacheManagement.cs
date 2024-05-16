@@ -1,15 +1,14 @@
 ﻿using Microsoft.Extensions.Caching.Memory;
-using WebApiSchool.MyLogger;
 using WebApiSchool.Services.Interfaces;
 
 namespace WebApiSchool.Services
 {
     public class CacheManagement : ICacheManagement
     {
-        private readonly IMyLogger _logger;
+        private readonly ILogger _logger;
         private readonly IMemoryCache _memoryCache;
 
-        public CacheManagement(IMyLogger logger, IMemoryCache memoryCache)
+        public CacheManagement(ILogger<CacheManagement> logger, IMemoryCache memoryCache)
         {
             _logger = logger;
             _memoryCache = memoryCache;

@@ -58,7 +58,7 @@ builder.Services.AddSwaggerGen(options =>
 
 builder.Services.AddAutoMapper(typeof(AutoMapperConfig));
 builder.Services.AddScoped<APIResponse>();
-builder.Services.AddTransient<IMyLogger, LogToFile>();
+builder.Services.AddTransient<ILoggerManager, LoggerManager>();
 builder.Services.AddScoped(typeof(IRepository<>), typeof(BaseRepository<>));
 builder.Services.AddScoped(typeof(IServices<>), typeof(BaseServices<>));
 builder.Services.AddScoped<IUserRepository, UserRepository>();

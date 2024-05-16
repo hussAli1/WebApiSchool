@@ -3,6 +3,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using WebApiSchool.Controllers;
 using WebApiSchool.MyLogger;
 
 namespace WebApiSchool.Services
@@ -12,9 +13,9 @@ namespace WebApiSchool.Services
     {
         private readonly IConfiguration _configuration;
         private readonly byte[] _key;
-        private readonly IMyLogger _logger;
+        private readonly ILogger _logger;
 
-        public AuthService(IConfiguration configuration , IMyLogger logger)
+        public AuthService(IConfiguration configuration , ILogger<AuthService> logger)
         {
             _configuration = configuration;
             _key = Encoding.ASCII.GetBytes(_configuration.GetValue<string>("JWTSecret"));

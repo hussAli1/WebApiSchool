@@ -17,12 +17,12 @@ namespace WebApiSchool.Controllers
     public class CourseController : ControllerBase
     {
         private readonly IRepository<Course> _repository;
-        private readonly IMyLogger _logger;
+        private readonly ILogger _logger;
         private APIResponse _apiResponse;
         private readonly IMapper _mapper;
 
         public CourseController(IRepository<Course> repository,
-            IMyLogger logger, IMapper mapper ,APIResponse apiResponse)
+            ILogger<CourseController> logger, IMapper mapper ,APIResponse apiResponse)
         {
             _repository = repository;
             _logger = logger;

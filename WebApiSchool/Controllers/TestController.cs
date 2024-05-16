@@ -13,16 +13,16 @@ namespace WebApiSchool.Controllers
     [Route("api/[controller]")]
     [ApiController]
 
-    [Authorize(Roles = "admin,user")]
+    //[Authorize(Roles = "admin,user")]
     public class TestController : ControllerBase
     {
         private readonly IRepository<Course> _repository;
-        private readonly IMyLogger _logger;
+        private readonly ILogger _logger;
         private APIResponse _apiResponse;
         private readonly IMapper _mapper;
 
         public TestController(IRepository<Course> repository,
-            IMyLogger logger, IMapper mapper, APIResponse apiResponse)
+            ILogger<TestController> logger, IMapper mapper, APIResponse apiResponse)
         {
             _repository = repository;
             _logger = logger;
@@ -31,8 +31,8 @@ namespace WebApiSchool.Controllers
 
         }
 
-        [HttpGet(Name = "GetCourse")]
-        [Authorize(Roles = CustomRoles.Admin)]
+        [HttpGet(Name = "GetAll")]
+        //[Authorize(Roles = CustomRoles.Admin)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
@@ -41,6 +41,9 @@ namespace WebApiSchool.Controllers
         {
             try
             {
+                //Exception ex = null;
+                //_logger.LogError(new EventId(0, "GetAll"), ex,"dxfhdt");
+
                 object ob = new { id = 2 , name = "Ali" , city = "a1" };
                 _apiResponse.Data = ob;
                 _apiResponse.Status = true;
@@ -49,7 +52,7 @@ namespace WebApiSchool.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex.Message);
+                _logger.LogError(new EventId(0, "GetAll"), ex, ex.Message);
                 _apiResponse.Errors.Add(ex.Message);
                 _apiResponse.StatusCode = HttpStatusCode.InternalServerError;
                 _apiResponse.Status = false;

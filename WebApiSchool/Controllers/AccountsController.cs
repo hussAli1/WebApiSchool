@@ -20,12 +20,12 @@ namespace WebApiSchool.Controllers
     [AllowAnonymous]
     public class AccountsController : ControllerBase
     {
-        private readonly IMyLogger _logger;
+        private readonly ILogger _logger;
         private readonly IConfiguration _configuration;
         private readonly IUserService _userService;
         private readonly AuthService _authService;
 
-        public AccountsController(IMyLogger logger, IUserService userService, IConfiguration configuration, AuthService authService)
+        public AccountsController(ILogger<AccountsController> logger, IUserService userService, IConfiguration configuration, AuthService authService)
         {
             _logger = logger;
             _configuration = configuration;
