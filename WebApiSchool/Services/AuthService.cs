@@ -13,9 +13,9 @@ namespace WebApiSchool.Services
     {
         private readonly IConfiguration _configuration;
         private readonly byte[] _key;
-        private readonly ILogger _logger;
+        private readonly ILoggerManager _logger;
 
-        public AuthService(IConfiguration configuration , ILogger<AuthService> logger)
+        public AuthService(IConfiguration configuration , ILoggerManager logger)
         {
             _configuration = configuration;
             _key = Encoding.ASCII.GetBytes(_configuration.GetValue<string>("JWTSecret"));
@@ -43,7 +43,7 @@ namespace WebApiSchool.Services
             }
             catch (Exception ex)
             {
-                _logger.LogError("Failed to generate JWT token."+ex.Message);
+                _logger.LogError("Failed to generate JWT token. " + ex.Message , "AuthService");
                 throw;
             }
         }

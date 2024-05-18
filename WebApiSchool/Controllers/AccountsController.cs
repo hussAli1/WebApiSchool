@@ -20,12 +20,12 @@ namespace WebApiSchool.Controllers
     [AllowAnonymous]
     public class AccountsController : ControllerBase
     {
-        private readonly ILogger _logger;
+        private readonly ILoggerManager _logger;
         private readonly IConfiguration _configuration;
         private readonly IUserService _userService;
         private readonly AuthService _authService;
 
-        public AccountsController(ILogger<AccountsController> logger, IUserService userService, IConfiguration configuration, AuthService authService)
+        public AccountsController(ILoggerManager logger, IUserService userService, IConfiguration configuration, AuthService authService)
         {
             _logger = logger;
             _configuration = configuration;
@@ -65,7 +65,7 @@ namespace WebApiSchool.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError("Login failed: " + ex.Message);
+                _logger.LogError("Login failed: " + ex.Message, "AccountsController");
                 return StatusCode(500, "Internal server error");
             }
         }

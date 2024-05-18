@@ -17,12 +17,12 @@ namespace WebApiSchool.Controllers
     public class TestController : ControllerBase
     {
         private readonly IRepository<Course> _repository;
-        private readonly ILogger _logger;
+        private readonly ILoggerManager _logger;
         private APIResponse _apiResponse;
         private readonly IMapper _mapper;
 
         public TestController(IRepository<Course> repository,
-            ILogger<TestController> logger, IMapper mapper, APIResponse apiResponse)
+            ILoggerManager logger, IMapper mapper, APIResponse apiResponse)
         {
             _repository = repository;
             _logger = logger;
@@ -52,7 +52,7 @@ namespace WebApiSchool.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(new EventId(0, "GetAll"), ex, ex.Message);
+                _logger.LogError(ex.Message, "TestController");
                 _apiResponse.Errors.Add(ex.Message);
                 _apiResponse.StatusCode = HttpStatusCode.InternalServerError;
                 _apiResponse.Status = false;

@@ -17,12 +17,12 @@ namespace WebApiSchool.Controllers
     public class CourseController : ControllerBase
     {
         private readonly IRepository<Course> _repository;
-        private readonly ILogger _logger;
+        private readonly ILoggerManager _logger;
         private APIResponse _apiResponse;
         private readonly IMapper _mapper;
 
         public CourseController(IRepository<Course> repository,
-            ILogger<CourseController> logger, IMapper mapper ,APIResponse apiResponse)
+            ILoggerManager logger, IMapper mapper ,APIResponse apiResponse)
         {
             _repository = repository;
             _logger = logger;
@@ -49,7 +49,7 @@ namespace WebApiSchool.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex.Message);
+                _logger.LogError(ex.Message, "CourseController");
                 _apiResponse.Errors.Add(ex.Message);
                 _apiResponse.StatusCode = HttpStatusCode.InternalServerError;
                 _apiResponse.Status = false;
