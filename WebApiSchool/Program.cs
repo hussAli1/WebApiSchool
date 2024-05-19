@@ -12,10 +12,11 @@ using Microsoft.AspNetCore.Authorization;
 using WebApiSchool.DTO;
 using WebApiSchool.Services.Interfaces;
 using WebApiSchool.Configurations;
+using WebApiSchool.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+// Add connection String databsse
 builder.Services.AddDbContext<AppDbContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("connectionString"));
@@ -25,8 +26,9 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 
 
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
+
+// AddSwagger AddAuthentication
 builder.Services.AddSwaggerGen(options =>
 {
     options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
@@ -57,18 +59,23 @@ builder.Services.AddSwaggerGen(options =>
 
 
 builder.Services.AddAutoMapper(typeof(AutoMapperConfig));
+
 builder.Services.AddScoped<APIResponse>();
 builder.Services.AddTransient<ILoggerManager, LoggerManager>();
 builder.Services.AddScoped(typeof(IRepository<>), typeof(BaseRepository<>));
 builder.Services.AddScoped(typeof(IServices<>), typeof(BaseServices<>));
-builder.Services.AddScoped<IUserRepository, UserRepository>();
+//builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddTransient<AuthService>();
 builder.Services.AddMemoryCache();
 builder.Services.AddSingleton<ICacheManagement, CacheManagement>();
 builder.Services.AddSingleton<IAuthorizationHandler, CustomAuthorizationHandler>();
-builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+//builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<IAuthService, AuthService>();
+
+//injection Repositories
+builder.Services.AddRepository();
+
 
 
 
