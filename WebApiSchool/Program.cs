@@ -67,6 +67,8 @@ builder.Services.AddTransient<AuthService>();
 builder.Services.AddMemoryCache();
 builder.Services.AddSingleton<ICacheManagement, CacheManagement>();
 builder.Services.AddSingleton<IAuthorizationHandler, CustomAuthorizationHandler>();
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+builder.Services.AddScoped<IAuthService, AuthService>();
 
 
 

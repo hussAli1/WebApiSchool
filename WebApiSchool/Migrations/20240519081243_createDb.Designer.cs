@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WebApiSchool.DataAccess;
 
@@ -11,9 +12,11 @@ using WebApiSchool.DataAccess;
 namespace WebApiSchool.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240519081243_createDb")]
+    partial class createDb
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -239,6 +242,9 @@ namespace WebApiSchool.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<Guid>("PermissionGroupGUID")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("PermissionGroupId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Username")

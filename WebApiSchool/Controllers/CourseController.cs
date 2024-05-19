@@ -41,7 +41,7 @@ namespace WebApiSchool.Controllers
         {
             try
             {
-                var courses = await _repository.GetAllAsync();
+                var courses = await _repository.SelectAll();
                 _apiResponse.Data = _mapper.Map<List<CourseDTO>>(courses);
                 _apiResponse.Status = true;
                 _apiResponse.StatusCode = HttpStatusCode.OK;

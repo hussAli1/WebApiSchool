@@ -12,8 +12,8 @@ using WebApiSchool.DataAccess;
 namespace WebApiSchool.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240514145225_createdb")]
-    partial class createdb
+    [Migration("20240519081704_createDb2")]
+    partial class createDb2
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -242,9 +242,6 @@ namespace WebApiSchool.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<Guid>("PermissionGroupGUID")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("PermissionGroupId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Username")

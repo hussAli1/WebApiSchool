@@ -1,42 +1,67 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 using WebApiSchool.DataAccess;
+using WebApiSchool.DataAccess.Models;
 using WebApiSchool.Repository.Interfaces;
 
 namespace WebApiSchool.Repository
 {
     public class BaseRepository<TEntity> : IRepository<TEntity> where TEntity : class
     {
-        private readonly AppDbContext _dbContext;
-        private DbSet<TEntity> _dbSet;
+        private DbSet<TEntity> _table;
         public BaseRepository(AppDbContext dbContext)
         {
-            _dbContext = dbContext;
-            _dbSet = _dbContext.Set<TEntity>();
-        }
-        public Task<TEntity> CreateAsync(TEntity dbRecord)
-        {
-            throw new NotImplementedException();
+            _table = dbContext.Set<TEntity>();
         }
 
-        public Task<bool> DeleteAsync(TEntity dbRecord)
+        public async Task<int> Count()
         {
-            throw new NotImplementedException();
+            return await _table.AsNoTracking().CountAsync();
         }
 
-        public async Task<List<TEntity>> GetAllAsync()
+        public async Task CreateAsync(TEntity entity)
         {
-            return await _dbSet.ToListAsync();
+            await _table.AddAsync(entity);
         }
 
-        public Task<TEntity> GetAsync(Expression<Func<TEntity, bool>> filter)
+        public async Task CreateAsync(List<TEntity> entity)
         {
-            throw new NotImplementedException();
+            await _table.AddRangeAsync(entity);
         }
 
-        public Task<TEntity> UpdateAsync(TEntity dbRecord)
+        public void Delete(TEntity entity)
         {
-            throw new NotImplementedException();
+            _table.Remove(entity);
+        }
+
+        public void DeleteRange(IEnumerable<TEntity> entity)
+        {
+             _table.RemoveRange(entity);
+        }
+
+        public IQueryable<TEntity> Select()
+        {
+            return _table.AsQueryable();
+        }
+
+        public async Task<List<TEntity>> SelectAll()
+        {
+            return await _table.AsNoTracking().ToListAsync();
+        }
+
+        public async Task<TEntity> SelectById(object id)
+        {
+            return await _table.FindAsync(id);
+        }
+
+        public void Update(TEntity entity)
+        {
+            _table.Update(entity);
+        }
+
+        public void Update(IEnumerable<TEntity> entity)
+        {
+            _table.UpdateRange(entity);
         }
     }
 }

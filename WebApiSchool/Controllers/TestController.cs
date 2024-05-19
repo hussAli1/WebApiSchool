@@ -13,7 +13,7 @@ namespace WebApiSchool.Controllers
     [Route("api/[controller]")]
     [ApiController]
 
-    //[Authorize(Roles = "admin,user")]
+    [Authorize(Roles = "admin,user")]
     public class TestController : ControllerBase
     {
         private readonly IRepository<Course> _repository;
@@ -32,7 +32,7 @@ namespace WebApiSchool.Controllers
         }
 
         [HttpGet(Name = "GetAll")]
-        //[Authorize(Roles = CustomRoles.Admin)]
+        [Authorize(Roles = CustomRoles.Admin)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]

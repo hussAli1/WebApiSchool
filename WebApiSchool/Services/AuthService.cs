@@ -5,11 +5,12 @@ using System.Security.Claims;
 using System.Text;
 using WebApiSchool.Controllers;
 using WebApiSchool.MyLogger;
+using WebApiSchool.Services.Interfaces;
 
 namespace WebApiSchool.Services
 {
 
-    public class AuthService
+    public class AuthService : IAuthService
     {
         private readonly IConfiguration _configuration;
         private readonly byte[] _key;

@@ -10,6 +10,8 @@ using System.Text;
 using WebApiSchool.DataAccess.Models;
 using WebApiSchool.DTO;
 using WebApiSchool.MyLogger;
+using WebApiSchool.Repository;
+using WebApiSchool.Repository.Interfaces;
 using WebApiSchool.Services;
 using WebApiSchool.Services.Interfaces;
 
@@ -22,15 +24,23 @@ namespace WebApiSchool.Controllers
     {
         private readonly ILoggerManager _logger;
         private readonly IConfiguration _configuration;
-        private readonly IUserService _userService;
-        private readonly AuthService _authService;
+        //private readonly IUserService _userService;
+        private readonly IAuthService _authService;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public AccountsController(ILoggerManager logger, IUserService userService, IConfiguration configuration, AuthService authService)
+        public AccountsController(
+            ILoggerManager logger,
+            IUserService userService,
+            IConfiguration configuration,
+            IAuthService authService,
+            IUnitOfWork unitOfWork
+            )
         {
             _logger = logger;
             _configuration = configuration;
             _authService = authService;
-            _userService = userService;
+            //_userService = userService;
+            _unitOfWork = unitOfWork;
         }
         [HttpPost]
         public async Task<ActionResult> Login(LoginDTO model)
@@ -44,7 +54,7 @@ namespace WebApiSchool.Controllers
 
                 var key = Encoding.ASCII.GetBytes(_configuration.GetValue<string>("JWTSecret"));
 
-                var user = await _userService.LoginUserAsync(model.Username, model.Password);
+                var user = await _unitOfWork.Users.LoginUserAsync(model.Username, model.Password);
 
                 if (user != null)
                 {

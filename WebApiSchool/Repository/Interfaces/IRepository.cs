@@ -4,10 +4,24 @@ namespace WebApiSchool.Repository.Interfaces
 {
     public interface IRepository<TEntity>
     {
-        Task<List<TEntity>> GetAllAsync();
-        Task<TEntity> GetAsync(Expression<Func<TEntity, bool>> filter);
-        Task<TEntity> CreateAsync(TEntity dbRecord);
-        Task<TEntity> UpdateAsync(TEntity dbRecord);
-        Task<bool> DeleteAsync(TEntity dbRecord);
+        IQueryable<TEntity> Select();
+
+        Task<List<TEntity>> SelectAll();
+
+        Task<TEntity> SelectById(object id);
+
+        Task CreateAsync(TEntity entity);
+        Task CreateAsync(List<TEntity> entity);
+
+        void Update(TEntity entity);
+
+        void Update(IEnumerable<TEntity> entity);
+
+        void Delete(TEntity entity);
+
+        public void DeleteRange(IEnumerable<TEntity> entity);
+
+        Task<int> Count();
+
     }
 }

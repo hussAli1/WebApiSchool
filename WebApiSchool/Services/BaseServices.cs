@@ -26,7 +26,7 @@ namespace WebApiSchool.Services
 
         public async Task<List<TEntity>> GetAllAsync()
         {
-            return await _repository.GetAllAsync();
+            return await _repository.SelectAll();
         }
 
         public Task<TEntity> GetAsync(Expression<Func<TEntity, bool>> filter)

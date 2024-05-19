@@ -14,7 +14,7 @@ namespace WebApiSchool.DataAccess.Models
 
         public Guid PermissionGroupGUID { get; set; }
 
-        [ForeignKey("PermissionGroupId")]
+        [ForeignKey("PermissionGroupGUID")]
         public PermissionGroup PermissionGroup { get; set; }
     }
 }
