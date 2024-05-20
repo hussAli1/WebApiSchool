@@ -23,8 +23,6 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 });
 
 
-
-
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 
@@ -77,8 +75,6 @@ builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddRepository();
 
 
-
-
 var JWTSecret = Encoding.ASCII.GetBytes(builder.Configuration.GetValue<string>("JWTSecret"));
 builder.Services.AddAuthentication(options =>
 {
@@ -97,8 +93,6 @@ builder.Services.AddAuthentication(options =>
     };
 });
 
-
-
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -107,14 +101,9 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-
 app.UseHttpsRedirection();
-
 app.UseRouting();
-
 app.UseAuthentication();
 app.UseAuthorization();
-
 app.MapControllers();
-
 app.Run();
