@@ -24,8 +24,9 @@ namespace WebApiSchool.Services
             catch (Exception ex)
             {
                 _logger.LogError(ex.Message, "CacheManagement", "GetCache");
-                return default;
             }
+
+            return null;
         }
 
         public void Remove(string key)
@@ -48,7 +49,6 @@ namespace WebApiSchool.Services
                 {
                     timeSpan = TimeSpan.FromHours(3);
                 }
-
                 _memoryCache.Set(key, value, (TimeSpan)timeSpan);
             }
             catch (Exception ex)
