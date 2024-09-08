@@ -13,8 +13,6 @@ namespace WebApiSchool.DataAccess.Config
 
             // builder.Property(x => x.CourseName).HasMaxLength(255); // nvarchar(255)
 
-
-
             builder.HasOne(x => x.Course)
                 .WithMany(x => x.Reviews)
                 .HasForeignKey(x => x.CourseGUID)

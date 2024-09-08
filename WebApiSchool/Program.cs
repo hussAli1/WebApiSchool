@@ -23,6 +23,18 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 });
 
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowLocalhost",
+        builder =>
+        {
+            builder.WithOrigins("http://localhost:8080")
+                   .AllowAnyHeader()
+                   .AllowAnyMethod();
+        });
+});
+
+
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 
@@ -103,6 +115,7 @@ if (app.Environment.IsDevelopment())
 }
 app.UseHttpsRedirection();
 app.UseRouting();
+app.UseCors("AllowLocalhost");
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
