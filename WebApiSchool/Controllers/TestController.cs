@@ -12,7 +12,7 @@ namespace WebApiSchool.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
+    //[Authorize]
     public class TestController : ControllerBase
     {
         private readonly IRepository<Course> _repository;
@@ -30,8 +30,8 @@ namespace WebApiSchool.Controllers
 
         }
 
-        [HttpGet(Name = "GetAll")]
-       // [Authorize(Roles = CustomRoles.Admin)]
+        [HttpGet("GetAll", Name = "GetAll")]
+        // [Authorize(Roles = CustomRoles.Admin)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
@@ -69,5 +69,8 @@ namespace WebApiSchool.Controllers
                 return _apiResponse;
             }
         }
+
+
+       
     }
 }

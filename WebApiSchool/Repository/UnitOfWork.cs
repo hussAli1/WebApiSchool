@@ -10,11 +10,15 @@ namespace WebApiSchool.Repository
         private readonly AppDbContext _context;
 
         public IUserRepository Users { get; }
+        public IPermissionGroupsRepository PermissionGroups { get; }
 
-        public UnitOfWork(AppDbContext context, IUserRepository user)
+        public UnitOfWork(AppDbContext context, 
+            IUserRepository user,
+            IPermissionGroupsRepository permissionGroups)
         {
             _context = context;
             Users = user;
+            PermissionGroups = permissionGroups;
         }
         public int Complete()
         {

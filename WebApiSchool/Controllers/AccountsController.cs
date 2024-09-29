@@ -1,4 +1,5 @@
-﻿using Azure;
+﻿using AutoMapper;
+using Azure;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -27,13 +28,15 @@ namespace WebApiSchool.Controllers
         //private readonly IUserService _userService;
         private readonly IAuthService _authService;
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IMapper _mapper;
 
         public AccountsController(
             ILoggerManager logger,
             IUserService userService,
             IConfiguration configuration,
             IAuthService authService,
-            IUnitOfWork unitOfWork
+            IUnitOfWork unitOfWork,
+            IMapper mapper
             )
         {
             _logger = logger;
@@ -41,8 +44,13 @@ namespace WebApiSchool.Controllers
             _authService = authService;
             //_userService = userService;
             _unitOfWork = unitOfWork;
+            _mapper = mapper;
         }
-        [HttpPost]
+        [HttpPost("Login", Name = "Login")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult> Login(LoginDTO model)
         {
             try
@@ -80,5 +88,44 @@ namespace WebApiSchool.Controllers
             }
         }
 
-    }
+        [HttpPost]
+        [Route("AddUser")]
+        public async Task<ActionResult> AddUser(RegisterDTO model)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest("Invalid user data.");
+                }
+
+                var existingUser = await _unitOfWork.Users.GetUserByUsernameAsync(model.Username);
+                if (existingUser != null)
+                {
+                    return BadRequest("Username already exists.");
+                }
+
+                model.Role = Guid.Parse("F9F68922-9C6D-4142-BC8C-000AB06B5AB3");
+                var permissionGroup = await _unitOfWork.PermissionGroups.SelectById(model.Role);
+                if (permissionGroup == null)
+                {
+                    return BadRequest("Invalid role or permission group.");
+                }
+
+                var userEntity = _mapper.Map<User>(model);
+                userEntity.PermissionGroup = permissionGroup;
+
+                await _unitOfWork.Users.CreateAsync(userEntity);
+                await _unitOfWork.CompleteAsync();
+
+                return Ok("User added successfully.");
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("Failed to add user: " + ex.Message, "AccountsController");
+                return StatusCode(500, "Internal server error");
+            }
+        }
+    } 
 }

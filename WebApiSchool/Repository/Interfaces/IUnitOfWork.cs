@@ -5,6 +5,7 @@ namespace WebApiSchool.Repository.Interfaces
     public interface IUnitOfWork : IDisposable
     {
         IUserRepository Users { get; }
+        IPermissionGroupsRepository PermissionGroups { get; }
         int Complete();
         Task<IdentityResult> CompleteAsync();
     }

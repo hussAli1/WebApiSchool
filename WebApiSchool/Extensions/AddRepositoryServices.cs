@@ -10,6 +10,7 @@ namespace WebApiSchool.Extensions
         public static IServiceCollection AddRepository(this IServiceCollection services)
         {
             services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IPermissionGroupsRepository, PermissionGroupsRepository>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
 
             return services;

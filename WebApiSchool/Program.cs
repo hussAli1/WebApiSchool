@@ -23,17 +23,28 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 });
 
 
+//builder.Services.AddCors(options =>
+//{
+//    options.AddPolicy("AllowLocalhost",
+//        builder =>
+//        {
+//            builder.WithOrigins("http://localhost:3000")
+//                   .AllowAnyHeader()
+//                   .AllowAnyMethod();
+//        });
+//});
+
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowLocalhost",
+    options.AddPolicy("AllowLocalhost3000",
         builder =>
         {
-            builder.WithOrigins("http://localhost:8080")
+            builder.WithOrigins("http://localhost:3000") // Allow only localhost:3000
                    .AllowAnyHeader()
-                   .AllowAnyMethod();
+                   .AllowAnyMethod()
+                   .AllowCredentials(); // Enable credentials
         });
 });
-
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
@@ -74,13 +85,11 @@ builder.Services.AddScoped<APIResponse>();
 builder.Services.AddTransient<ILoggerManager, LoggerManager>();
 builder.Services.AddScoped(typeof(IRepository<>), typeof(BaseRepository<>));
 builder.Services.AddScoped(typeof(IServices<>), typeof(BaseServices<>));
-//builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddTransient<AuthService>();
 builder.Services.AddMemoryCache();
 builder.Services.AddSingleton<ICacheManagement, CacheManagement>();
 builder.Services.AddSingleton<IAuthorizationHandler, CustomAuthorizationHandler>();
-//builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 
 //injection Repositories
@@ -115,7 +124,7 @@ if (app.Environment.IsDevelopment())
 }
 app.UseHttpsRedirection();
 app.UseRouting();
-app.UseCors("AllowLocalhost");
+app.UseCors("AllowLocalhost3000");
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();

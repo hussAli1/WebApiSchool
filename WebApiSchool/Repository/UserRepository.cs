@@ -18,5 +18,10 @@ namespace WebApiSchool.Repository
             return await _dbContext.Users.Include(u => u.PermissionGroup)
                                          .FirstOrDefaultAsync(u => u.Username == userNmae && u.Password == password);
         }
+
+        public async Task<User> GetUserByUsernameAsync(string username)
+        {
+            return await _dbContext.Users.FirstOrDefaultAsync(u => u.Username == username);
+        }
     }
 }
