@@ -45,6 +45,7 @@ namespace WebApiSchool.Controllers
 
                 var list = new List<object>
                     {
+                        new { id = 1, name = "Ali", city = "a1" },
                         new { id = 2, name = "Ali", city = "a1" },
                         new { id = 4, name = "Ali4", city = "a14" },
                         new { id = 5, name = "Ali5", city = "a15" },
@@ -70,7 +71,50 @@ namespace WebApiSchool.Controllers
             }
         }
 
+        [HttpGet("GetById/{id}")]
+        public async Task<ActionResult<APIResponse>> GetById(int id)
+        {
+            try
+            {
+                // Example data list (this would normally come from a database)
+                var list = new List<object>
+            {
+                new { id = 1, name = "Ali", city = "a1" },
+                new { id = 2, name = "Ali", city = "a1" },
+                new { id = 4, name = "Ali4", city = "a14" },
+                new { id = 5, name = "Ali5", city = "a15" },
+                new { id = 6, name = "Ali6", city = "a16" },
+                new { id = 7, name = "Ali7", city = "a17" },
+                new { id = 8, name = "Ali8", city = "a18" },
+                new { id = 9, name = "Ali9", city = "a19" },
+                new { id = 11, name = "Ali11", city = "a111" },
+                new { id = 12, name = "Ali12", city = "a112" },
+            };
 
-       
+                // Find the item by id
+                var item = list.FirstOrDefault(x => ((dynamic)x).id == id); // Using dynamic to access properties
+
+                if (item == null)
+                {
+                    _apiResponse.Status = false;
+                    _apiResponse.StatusCode = HttpStatusCode.NotFound;
+                    _apiResponse.Errors.Add("Item not found");
+                    return NotFound(_apiResponse);
+                }
+
+                _apiResponse.Data = item;
+                _apiResponse.Status = true;
+                _apiResponse.StatusCode = HttpStatusCode.OK;
+                return Ok(_apiResponse);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message, "TestController");
+                _apiResponse.Errors.Add(ex.Message);
+                _apiResponse.StatusCode = HttpStatusCode.InternalServerError;
+                _apiResponse.Status = false;
+                return _apiResponse;
+            }
+        }
     }
 }

@@ -1,19 +1,11 @@
 ﻿using AutoMapper;
-using Azure;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
-using Microsoft.IdentityModel.Tokens;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
 using System.Text;
 using WebApiSchool.DataAccess.Models;
 using WebApiSchool.DTO;
 using WebApiSchool.MyLogger;
-using WebApiSchool.Repository;
 using WebApiSchool.Repository.Interfaces;
-using WebApiSchool.Services;
 using WebApiSchool.Services.Interfaces;
 
 namespace WebApiSchool.Controllers
