@@ -80,6 +80,16 @@ namespace WebApiSchool.Controllers
             }
         }
 
+        [HttpGet("health")]
+        public async Task<HealthResponse> HealthCheck()
+        {
+            return await Task.FromResult(new HealthResponse
+            {
+                Status = true, 
+                Message = "API is healthy"
+            });
+        }
+
         [HttpPost]
         [Route("AddUser")]
         public async Task<ActionResult> AddUser(RegisterDTO model)
