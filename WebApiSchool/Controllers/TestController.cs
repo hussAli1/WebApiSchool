@@ -2,6 +2,8 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Hosting;
 using System.Net;
 using WebApiSchool.DataAccess.Models;
 using WebApiSchool.DTO;
@@ -70,6 +72,38 @@ namespace WebApiSchool.Controllers
                 return _apiResponse;
             }
         }
+        [HttpGet("GetPosts")]
+        public async Task<ActionResult<APIResponse>> GetPosts(int page = 1, int pageSize = 10)
+        {
+            // Ensure valid pagination parameters
+            if (page < 1 || pageSize < 1)
+            {
+                _apiResponse.Status = false;
+                _apiResponse.StatusCode = HttpStatusCode.BadRequest;
+                _apiResponse.Errors.Add("Page and pageSize must be greater than 0.");
+                return BadRequest(_apiResponse);
+            }
+
+            // Sample data
+            var data = Enumerable.Range(1, 50).Select(i => new
+            {
+                id = i,
+                name = $"Ali{i}",
+                city = $"a{i}"
+            }).ToList();
+
+            // Paginate
+            var posts = data
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToList();
+
+            _apiResponse.Data = posts;
+            _apiResponse.Status = true;
+            _apiResponse.StatusCode = HttpStatusCode.OK;
+            return Ok(_apiResponse);
+        }
+
 
         [HttpGet("GetById/{id}")]
         public async Task<ActionResult<APIResponse>> GetById(int id)
