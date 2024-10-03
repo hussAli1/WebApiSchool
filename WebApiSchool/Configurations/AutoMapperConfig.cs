@@ -13,8 +13,7 @@ namespace WebApiSchool.Configurations
             CreateMap<CourseDTO, Course>().ReverseMap();
 
             CreateMap<RegisterDTO, User>()
-            .ForMember(dest => dest.GUID, opt => opt.MapFrom(src => Guid.NewGuid())) 
-            .ForMember(dest => dest.PermissionGroupGUID, opt => opt.MapFrom(src => src.Role));
+            .ForMember(dest => dest.GUID, opt => opt.MapFrom(src => Guid.NewGuid()));
         }
     }
 }

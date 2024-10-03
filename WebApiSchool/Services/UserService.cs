@@ -1,20 +1,83 @@
 ﻿using WebApiSchool.DataAccess.Models;
+using WebApiSchool.DTO;
 using WebApiSchool.Repository.Interfaces;
 using WebApiSchool.Services.Interfaces;
+using WebApiSchool.Exceptions;
+using AutoMapper;
+using System.Text;
 
 namespace WebApiSchool.Services
 {
-    public class UserService : BaseServices<User>, IUserService
+    public class UserService : IUserService
     {
-        private readonly IUserRepository _repository;
-        public UserService(IUserRepository repository) : base(repository)
+        private readonly IUnitOfWork _unitOfWork;
+        private readonly IAuthService _authService;
+        private readonly IConfiguration _configuration;
+        private readonly IMapper _mapper;
+
+        public UserService(IUnitOfWork unitOfWork,
+               IAuthService authService,
+               IConfiguration configuration,
+                IMapper mapper)
         {
-            _repository = repository;
+            _unitOfWork = unitOfWork;
+            _authService = authService;
+            _configuration = configuration;
+            _mapper = mapper;
         }
 
-        public async Task<User> LoginUserAsync(string userNmae, string password)
+
+        public async Task<LoginResponseDTO> LoginAsync(LoginDTO model)
         {
-            return await _repository.LoginUserAsync(userNmae, password);
+            if (string.IsNullOrEmpty(model.Username) || string.IsNullOrEmpty(model.Password))
+            {
+                throw new ValidationException("Please provide username and password");
+            }
+
+            var user = await _unitOfWork.Users.LoginUserAsync(model.Username, model.Password);
+
+            if (user == null)
+            {
+                throw new UnauthorizedAccessException("Invalid username and password");
+            }
+
+            var key = Encoding.ASCII.GetBytes(_configuration.GetValue<string>("JWTSecret"));
+            var token = _authService.GenerateJwtToken(model.Username, user.PermissionGroup.Name);
+
+            return new LoginResponseDTO
+            {
+                Username = model.Username,
+                Token = token
+            };
+        }
+
+        public async Task<string> RegisterUserAsync(RegisterDTO model)
+        {
+            if (model.Password != model.ConfirmPassword)
+            {
+                throw new ValidationException("كلمات المرور غير متطابقة");
+            }
+
+            var existingUser = await _unitOfWork.Users.GetUserByUsernameAsync(model.Username);
+            if (existingUser != null)
+            {
+                throw new ValidationException("اسم المستخدم موجود بالفعل");
+            }
+
+            var role = Guid.Parse("F9F68922-9C6D-4142-BC8C-000AB06B5AB3");
+            var permissionGroup = await _unitOfWork.PermissionGroups.SelectById(role);
+            if (permissionGroup == null)
+            {
+                throw new ValidationException("Invalid role or permission group.");
+            }
+
+            var userEntity = _mapper.Map<User>(model);
+            userEntity.PermissionGroup = permissionGroup;
+
+            await _unitOfWork.Users.CreateAsync(userEntity);
+            await _unitOfWork.CompleteAsync();
+
+            return "تم انشاء الحساب بنجاح";
         }
     }
 }

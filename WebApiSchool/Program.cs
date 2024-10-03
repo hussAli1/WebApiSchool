@@ -13,10 +13,10 @@ using WebApiSchool.DTO;
 using WebApiSchool.Services.Interfaces;
 using WebApiSchool.Configurations;
 using WebApiSchool.Extensions;
+using WebApiSchool.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add connection String databsse
 builder.Services.AddDbContext<AppDbContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("connectionString"));
@@ -28,17 +28,16 @@ builder.Services.AddCors(options =>
     options.AddPolicy("AllowLocalhost3000",
         builder =>
         {
-            builder.WithOrigins("http://localhost:3000") // Allow only localhost:3000
+            builder.WithOrigins("http://localhost:3000") 
                    .AllowAnyHeader()
                    .AllowAnyMethod()
-                   .AllowCredentials(); // Enable credentials
+                   .AllowCredentials(); 
         });
 });
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 
-// AddSwagger AddAuthentication
 builder.Services.AddSwaggerGen(options =>
 {
     options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
@@ -80,8 +79,7 @@ builder.Services.AddMemoryCache();
 builder.Services.AddSingleton<ICacheManagement, CacheManagement>();
 builder.Services.AddSingleton<IAuthorizationHandler, CustomAuthorizationHandler>();
 builder.Services.AddScoped<IAuthService, AuthService>();
-
-//injection Repositories
+builder.Services.AddSingleton<ExceptionMiddleware>();
 builder.Services.AddRepository();
 
 
@@ -92,7 +90,6 @@ builder.Services.AddAuthentication(options =>
     options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
 }).AddJwtBearer(options =>
 {
-    //options.RequireHttpsMetadata = false;
     options.SaveToken = true;
     options.TokenValidationParameters = new TokenValidationParameters()
     {
@@ -105,7 +102,6 @@ builder.Services.AddAuthentication(options =>
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -113,6 +109,8 @@ if (app.Environment.IsDevelopment())
 }
 app.UseHttpsRedirection();
 app.UseRouting();
+
+app.UseMiddleware<ExceptionMiddleware>();
 app.UseCors("AllowLocalhost3000");
 app.UseAuthentication();
 app.UseAuthorization();
