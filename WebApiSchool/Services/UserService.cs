@@ -31,14 +31,14 @@ namespace WebApiSchool.Services
         {
             if (string.IsNullOrEmpty(model.Username) || string.IsNullOrEmpty(model.Password))
             {
-                throw new ValidationException("Please provide username and password");
+                throw new ValidationException("الرجاء قم بأدخال اسم المستخدم وكلمة المرور");
             }
 
             var user = await _unitOfWork.Users.LoginUserAsync(model.Username, model.Password);
 
             if (user == null)
             {
-                throw new UnauthorizedAccessException("Invalid username and password");
+                throw new UnauthorizedAccessException("اسم المستخدم وكلمة المرور غير موجودين");
             }
 
             var key = Encoding.ASCII.GetBytes(_configuration.GetValue<string>("JWTSecret"));
