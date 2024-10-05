@@ -75,7 +75,6 @@ namespace WebApiSchool.Controllers
         [HttpGet("GetPosts")]
         public async Task<ActionResult<APIResponse>> GetPosts(int page = 1, int pageSize = 10)
         {
-            // Ensure valid pagination parameters
             if (page < 1 || pageSize < 1)
             {
                 _apiResponse.Status = false;
@@ -84,7 +83,6 @@ namespace WebApiSchool.Controllers
                 return BadRequest(_apiResponse);
             }
 
-            // Sample data
             var data = Enumerable.Range(1, 50).Select(i => new
             {
                 id = i,
@@ -92,13 +90,64 @@ namespace WebApiSchool.Controllers
                 city = $"a{i}"
             }).ToList();
 
-            // Paginate
+            var totalRecords = data.Count;
+
             var posts = data
                 .Skip((page - 1) * pageSize)
                 .Take(pageSize)
                 .ToList();
 
-            _apiResponse.Data = posts;
+            var response = new
+            {
+                TotalRecords = totalRecords,
+                Employees = posts
+            };
+
+            _apiResponse.Data = response;
+            _apiResponse.Status = true;
+            _apiResponse.StatusCode = HttpStatusCode.OK;
+            return Ok(_apiResponse);
+        }
+
+
+        [HttpGet("GetPostsDataTable")]
+        public async Task<ActionResult<APIResponse>> GetPostsDataTable(int page = 1, int pageSize = 10, string search = "")
+        {
+            if (page < 1 || pageSize < 1)
+            {
+                _apiResponse.Status = false;
+                _apiResponse.StatusCode = HttpStatusCode.BadRequest;
+                _apiResponse.Errors.Add("Page and pageSize must be greater than 0.");
+                return BadRequest(_apiResponse);
+            }
+
+            var data = Enumerable.Range(1, 70).Select(i => new
+            {
+                id = i,
+                name = $"Ali{i}",
+                city = $"a{i}"
+            }).ToList();
+
+            if (!string.IsNullOrEmpty(search))
+            {
+                data = data.Where(d => d.name.Contains(search, StringComparison.OrdinalIgnoreCase) 
+                || d.city.Contains(search, StringComparison.OrdinalIgnoreCase)).ToList();
+            }
+
+            var totalRecords = data.Count;
+
+            var posts = data
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToList();
+
+            var response = new
+            {
+                TotalRecords = totalRecords,
+                Employees = posts
+            };
+
+            _apiResponse.Data = response;
             _apiResponse.Status = true;
             _apiResponse.StatusCode = HttpStatusCode.OK;
             return Ok(_apiResponse);
@@ -110,7 +159,6 @@ namespace WebApiSchool.Controllers
         {
             try
             {
-                // Example data list (this would normally come from a database)
                 var list = new List<object>
             {
                 new { id = 1, name = "Ali", city = "a1" },
@@ -125,8 +173,7 @@ namespace WebApiSchool.Controllers
                 new { id = 12, name = "Ali12", city = "a112" },
             };
 
-                // Find the item by id
-                var item = list.FirstOrDefault(x => ((dynamic)x).id == id); // Using dynamic to access properties
+                var item = list.FirstOrDefault(x => ((dynamic)x).id == id);
 
                 if (item == null)
                 {
