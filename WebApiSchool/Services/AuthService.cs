@@ -32,10 +32,10 @@ namespace WebApiSchool.Services
                 {
                     Subject = new ClaimsIdentity(new Claim[]
                     {
-                new Claim(ClaimTypes.Name, username),
-                new Claim(ClaimTypes.Role, role)
+                        new Claim(ClaimTypes.Name, username),
+                        new Claim(ClaimTypes.Role, role)
                     }),
-                    Expires = DateTime.Now.AddHours(4),
+                    Expires = DateTime.Now.AddDays(30),
                     SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(_key), SecurityAlgorithms.HmacSha512Signature)
                 };
 

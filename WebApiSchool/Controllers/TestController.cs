@@ -14,7 +14,7 @@ namespace WebApiSchool.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    //[Authorize]
+    [Authorize]
     public class TestController : ControllerBase
     {
         private readonly IRepository<Course> _repository;
