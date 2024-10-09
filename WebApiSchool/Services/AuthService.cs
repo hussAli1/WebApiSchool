@@ -35,7 +35,7 @@ namespace WebApiSchool.Services
                 });
 
                 var listPermissions = new List<string>();
-                listPermissions.Add("read");
+                listPermissions.Add("add");
 
                 foreach (var permission in listPermissions)
                 {

@@ -75,8 +75,11 @@ namespace WebApiSchool.Controllers
             }
         }
         [HttpGet("GetPosts")]
-        [Authorize(Roles ="admin")]
-        [Permission(CustomRolesPermissions.read)]
+        [Permission("admin, superadmin", CustomRolesPermissions.read)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<APIResponse>> GetPosts(int page = 1, int pageSize = 10)
         {
             if (page < 1 || pageSize < 1)
