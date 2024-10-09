@@ -4,6 +4,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using WebApiSchool.Controllers;
+using WebApiSchool.Models;
 using WebApiSchool.MyLogger;
 using WebApiSchool.Services.Interfaces;
 
@@ -27,14 +28,24 @@ namespace WebApiSchool.Services
         {
             try
             {
+                var authClaims = new ClaimsIdentity( new[]
+                {
+                     new Claim(ClaimTypes.Name, username),
+                     new Claim(ClaimTypes.Role, role)
+                });
+
+                var listPermissions = new List<string>();
+                listPermissions.Add("read");
+
+                foreach (var permission in listPermissions)
+                {
+                    authClaims.AddClaim(new Claim("Permissions", permission));
+                }
+
                 var tokenHandler = new JwtSecurityTokenHandler();
                 var tokenDescriptor = new SecurityTokenDescriptor()
                 {
-                    Subject = new ClaimsIdentity(new Claim[]
-                    {
-                        new Claim(ClaimTypes.Name, username),
-                        new Claim(ClaimTypes.Role, role)
-                    }),
+                    Subject = authClaims,
                     Expires = DateTime.Now.AddDays(30),
                     SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(_key), SecurityAlgorithms.HmacSha512Signature)
                 };

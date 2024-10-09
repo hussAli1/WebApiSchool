@@ -7,6 +7,8 @@ using Microsoft.Extensions.Hosting;
 using System.Net;
 using WebApiSchool.DataAccess.Models;
 using WebApiSchool.DTO;
+using WebApiSchool.Extensions;
+using WebApiSchool.Models;
 using WebApiSchool.MyLogger;
 using WebApiSchool.Repository.Interfaces;
 
@@ -73,6 +75,8 @@ namespace WebApiSchool.Controllers
             }
         }
         [HttpGet("GetPosts")]
+        [Authorize(Roles ="admin")]
+        [Permission(CustomRolesPermissions.read)]
         public async Task<ActionResult<APIResponse>> GetPosts(int page = 1, int pageSize = 10)
         {
             if (page < 1 || pageSize < 1)
