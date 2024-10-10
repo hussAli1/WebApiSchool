@@ -40,8 +40,7 @@ public class PermissionAttribute : AuthorizeAttribute, IAsyncAuthorizationFilter
 
         if (!permissions.Contains(_permission))
         {
-            context.HttpContext.Response.StatusCode = StatusCodes.Status403Forbidden;
-            context.Result = new JsonResult(new { message = "Forbidden: You do not have permission to access this resource." });
+            context.Result = new ForbidResult();
             return;
         }
 

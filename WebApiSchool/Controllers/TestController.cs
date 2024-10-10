@@ -23,6 +23,8 @@ namespace WebApiSchool.Controllers
         private readonly ILoggerManager _logger;
         private APIResponse _apiResponse;
         private readonly IMapper _mapper;
+        private List<Person> lestData { get; set; }
+
 
         public TestController(IRepository<Course> repository,
             ILoggerManager logger, IMapper mapper, APIResponse apiResponse)
@@ -32,6 +34,33 @@ namespace WebApiSchool.Controllers
             _apiResponse = apiResponse;
             _mapper = mapper;
 
+            lestData = Enumerable.Range(1, 50).Select(i => new Person()
+            {
+                id = i,
+                name = $"Ali{i}",
+                city = $"a{i}"
+            }).ToList();
+
+            lestData = new List<Person>
+            {
+                new Person{ id = 1, name = "Ali", city = "a1" },
+                new Person { id = 2, name = "Ali", city = "a1" },
+                new Person{ id = 4, name = "Ali4", city = "a14" },
+                new Person{ id = 5, name = "Ali5", city = "a15" },
+                new Person{ id = 6, name = "Ali6", city = "a16" },
+                new Person{ id = 7, name = "Ali7", city = "a17" },
+                new Person{ id = 8, name = "Ali8", city = "a18" },
+                new Person{ id = 9, name = "Ali9", city = "a19" },
+                new Person{ id = 11, name = "Ali11", city = "a111" },
+                new Person{ id = 12, name = "Ali12", city = "a112" },
+            };
+        }
+
+        public class Person
+        {
+            public int id { get; set; }
+            public string name { get; set; }
+            public string city { get; set; }
         }
 
         [HttpGet("GetAll", Name = "GetAll")]
@@ -90,16 +119,10 @@ namespace WebApiSchool.Controllers
                 return BadRequest(_apiResponse);
             }
 
-            var data = Enumerable.Range(1, 50).Select(i => new
-            {
-                id = i,
-                name = $"Ali{i}",
-                city = $"a{i}"
-            }).ToList();
 
-            var totalRecords = data.Count;
+            var totalRecords = lestData.Count;
 
-            var posts = data
+            var posts = lestData
                 .Skip((page - 1) * pageSize)
                 .Take(pageSize)
                 .ToList();
@@ -128,16 +151,10 @@ namespace WebApiSchool.Controllers
                 return BadRequest(_apiResponse);
             }
 
-            var data = Enumerable.Range(1, 70).Select(i => new
-            {
-                id = i,
-                name = $"Ali{i}",
-                city = $"a{i}"
-            }).ToList();
-
+            var data = lestData;
             if (!string.IsNullOrEmpty(search))
             {
-                data = data.Where(d => d.name.Contains(search, StringComparison.OrdinalIgnoreCase) 
+                data = lestData.Where(d => d.name.Contains(search, StringComparison.OrdinalIgnoreCase) 
                 || d.city.Contains(search, StringComparison.OrdinalIgnoreCase)).ToList();
             }
 
@@ -204,5 +221,28 @@ namespace WebApiSchool.Controllers
                 return _apiResponse;
             }
         }
+
+        [HttpDelete("{id}")]
+        public IActionResult DeleteData(int id)
+        {
+            var itemToDelete = lestData.FirstOrDefault(d => d.id == id);
+
+            if (itemToDelete == null)
+            {
+                _apiResponse.StatusCode = HttpStatusCode.NotFound;
+                _apiResponse.Status = false; 
+                _apiResponse.Errors.Add("Item not found."); 
+                return NotFound(_apiResponse);
+            }
+
+            lestData.Remove(itemToDelete);
+
+            var lestData1 = lestData;
+            _apiResponse.StatusCode = HttpStatusCode.OK;
+            _apiResponse.Status = true; 
+            _apiResponse.Data = "Item deleted successfully.";
+            return Ok(_apiResponse);
+        }
+
     }
 }
