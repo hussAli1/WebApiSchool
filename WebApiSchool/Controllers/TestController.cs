@@ -7,6 +7,7 @@ using Microsoft.Extensions.Hosting;
 using System.Net;
 using WebApiSchool.DataAccess.Models;
 using WebApiSchool.DTO;
+using WebApiSchool.Exceptions;
 using WebApiSchool.Extensions;
 using WebApiSchool.Models;
 using WebApiSchool.MyLogger;
@@ -23,7 +24,7 @@ namespace WebApiSchool.Controllers
         private readonly ILoggerManager _logger;
         private APIResponse _apiResponse;
         private readonly IMapper _mapper;
-        private List<Person> lestData { get; set; }
+        private List<Person> lestData { get; set; } = new List<Person>();
 
 
         public TestController(IRepository<Course> repository,
@@ -34,26 +35,18 @@ namespace WebApiSchool.Controllers
             _apiResponse = apiResponse;
             _mapper = mapper;
 
-            lestData = Enumerable.Range(1, 50).Select(i => new Person()
+            if (DataStored.LestData == null || !DataStored.LestData.Any())
             {
-                id = i,
-                name = $"Ali{i}",
-                city = $"a{i}"
-            }).ToList();
+                DataStored.LestData = Enumerable.Range(1, 50).Select(i => new Person()
+                {
+                    id = i,
+                    name = $"Ali{i}",
+                    city = $"a{i}"
+                }).ToList();
+            }
+            lestData = DataStored.LestData;
 
-            lestData = new List<Person>
-            {
-                new Person{ id = 1, name = "Ali", city = "a1" },
-                new Person { id = 2, name = "Ali", city = "a1" },
-                new Person{ id = 4, name = "Ali4", city = "a14" },
-                new Person{ id = 5, name = "Ali5", city = "a15" },
-                new Person{ id = 6, name = "Ali6", city = "a16" },
-                new Person{ id = 7, name = "Ali7", city = "a17" },
-                new Person{ id = 8, name = "Ali8", city = "a18" },
-                new Person{ id = 9, name = "Ali9", city = "a19" },
-                new Person{ id = 11, name = "Ali11", city = "a111" },
-                new Person{ id = 12, name = "Ali12", city = "a112" },
-            };
+
         }
 
         public class Person
@@ -64,7 +57,6 @@ namespace WebApiSchool.Controllers
         }
 
         [HttpGet("GetAll", Name = "GetAll")]
-        // [Authorize(Roles = CustomRoles.Admin)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
@@ -73,9 +65,6 @@ namespace WebApiSchool.Controllers
         {
             try
             {
-                //Exception ex = null;
-                //_logger.LogError(new EventId(0, "GetAll"), ex,"dxfhdt");
-
                 var list = new List<object>
                     {
                         new { id = 1, name = "Ali", city = "a1" },
@@ -119,7 +108,6 @@ namespace WebApiSchool.Controllers
                 return BadRequest(_apiResponse);
             }
 
-
             var totalRecords = lestData.Count;
 
             var posts = lestData
@@ -138,6 +126,7 @@ namespace WebApiSchool.Controllers
             _apiResponse.StatusCode = HttpStatusCode.OK;
             return Ok(_apiResponse);
         }
+
 
 
         [HttpGet("GetPostsDataTable")]
@@ -222,7 +211,11 @@ namespace WebApiSchool.Controllers
             }
         }
 
-        [HttpDelete("{id}")]
+        [HttpDelete("DeleteData/{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public IActionResult DeleteData(int id)
         {
             var itemToDelete = lestData.FirstOrDefault(d => d.id == id);
