@@ -14,6 +14,7 @@ using WebApiSchool.Services.Interfaces;
 using WebApiSchool.Configurations;
 using WebApiSchool.Extensions;
 using WebApiSchool.Middlewares;
+using WebApiSchool.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -68,12 +69,13 @@ builder.Services.AddSwaggerGen(options =>
 
 
 builder.Services.AddAutoMapper(typeof(AutoMapperConfig));
-
 builder.Services.AddScoped<APIResponse>();
+builder.Services.AddScoped<ResponseModel>();
 builder.Services.AddTransient<ILoggerManager, LoggerManager>();
 builder.Services.AddScoped(typeof(IRepository<>), typeof(BaseRepository<>));
 builder.Services.AddScoped(typeof(IServices<>), typeof(BaseServices<>));
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IPostsService, PostsService>();
 builder.Services.AddTransient<AuthService>();
 builder.Services.AddMemoryCache();
 builder.Services.AddSingleton<ICacheManagement, CacheManagement>();

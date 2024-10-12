@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 using WebApiSchool.DataAccess;
+using WebApiSchool.DataAccess.Entities;
 using WebApiSchool.DataAccess.Models;
 using WebApiSchool.Repository.Interfaces;
 
@@ -39,6 +40,10 @@ namespace WebApiSchool.Repository
              _table.RemoveRange(entity);
         }
 
+        public async Task<List<TEntity>> GetPagedAsync(int page, int pageSize)
+        {
+            return await _table.Skip((page - 1) * pageSize).Take(pageSize).ToListAsync();
+        }
         public IQueryable<TEntity> Select()
         {
             return _table.AsQueryable();

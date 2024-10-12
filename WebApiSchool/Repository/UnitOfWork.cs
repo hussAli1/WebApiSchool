@@ -12,12 +12,16 @@ namespace WebApiSchool.Repository
         public IUserRepository Users { get; }
         public IPermissionGroupsRepository PermissionGroups { get; }
 
+        public IPostsRepository Posts { get; }
+
         public UnitOfWork(AppDbContext context, 
-            IUserRepository user,
+            IUserRepository users,
+            IPostsRepository posts,
             IPermissionGroupsRepository permissionGroups)
         {
             _context = context;
-            Users = user;
+            Users = users;
+            Posts = posts;
             PermissionGroups = permissionGroups;
         }
         public int Complete()

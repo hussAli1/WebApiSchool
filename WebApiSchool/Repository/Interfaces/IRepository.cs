@@ -2,7 +2,7 @@
 
 namespace WebApiSchool.Repository.Interfaces
 {
-    public interface IRepository<TEntity>
+    public interface IRepository<TEntity> where TEntity : class
     {
         IQueryable<TEntity> Select();
 
@@ -23,5 +23,8 @@ namespace WebApiSchool.Repository.Interfaces
 
         Task<int> Count();
 
+        Task<List<TEntity>> GetPagedAsync(int page, int pageSize);
+
+      
     }
 }

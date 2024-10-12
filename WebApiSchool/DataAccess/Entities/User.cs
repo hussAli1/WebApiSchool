@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
+using WebApiSchool.DataAccess.Entities;
 
 namespace WebApiSchool.DataAccess.Models
 {
@@ -16,5 +17,8 @@ namespace WebApiSchool.DataAccess.Models
 
         [ForeignKey("PermissionGroupGUID")]
         public PermissionGroup PermissionGroup { get; set; }
+
+        public ICollection<Post> Posts { get; set; }
+
     }
 }

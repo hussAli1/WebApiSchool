@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using WebApiSchool.DataAccess.Config;
+using WebApiSchool.DataAccess.Entities;
 using WebApiSchool.DataAccess.Models;
 
 namespace WebApiSchool.DataAccess
@@ -22,6 +23,7 @@ namespace WebApiSchool.DataAccess
         public DbSet<Participant> Particpants { get; set; }
         public DbSet<Enrollment> Enrollments { get; set; }
         public DbSet<Review> Reviews { get; set; }
+        public DbSet<Post> Posts { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
