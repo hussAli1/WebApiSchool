@@ -16,19 +16,14 @@ namespace WebApiSchool.Repository
 
         public async Task<List<Post>> SearchAsync(string search, int page, int pageSize)
         {
-            var query = _dbContext.Posts
-                           .AsNoTracking() 
-                           .Include(p => p.Author) 
-                           .AsQueryable();
+            return await _dbContext.Posts
+            .AsNoTracking()
+            .Include(p => p.Author)
+            .Where(p => string.IsNullOrEmpty(search) || p.Title.Contains(search) || p.Content.Contains(search))
+            .Skip((page - 1) * pageSize)
+            .Take(pageSize)
+            .ToListAsync();
 
-            if (!string.IsNullOrEmpty(search))
-            {
-                query = query.Where(p => p.Title.Contains(search) || p.Content.Contains(search));
-            }
-
-            return await query.Skip((page - 1) * pageSize)
-                              .Take(pageSize)
-                              .ToListAsync();
         }
 
         public async Task<int> SearchCountAsync(string search)

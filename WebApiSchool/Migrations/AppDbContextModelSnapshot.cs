@@ -57,50 +57,50 @@ namespace WebApiSchool.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("8c144e1e-52cf-427a-bfb1-c9349051743f"),
+                            Id = new Guid("315ec022-73f0-4014-a96d-380e099b99e4"),
                             AuthorId = new Guid("02f588e5-942d-4dbe-a6ae-046a7f60e9e4"),
                             Content = "This is the content of the first post.",
-                            CreatedAt = new DateTime(2024, 10, 12, 11, 44, 55, 284, DateTimeKind.Utc).AddTicks(1193),
+                            CreatedAt = new DateTime(2024, 10, 12, 18, 53, 53, 995, DateTimeKind.Local).AddTicks(1879),
                             Title = "Post1"
                         },
                         new
                         {
-                            Id = new Guid("504a976c-5a73-4e7f-afe8-c45784ba932f"),
+                            Id = new Guid("f1813a22-bad2-4d5a-a9df-f8d0f7ed4b4a"),
                             AuthorId = new Guid("b1b62bb0-17b6-4401-a0c7-54c8279b8d0d"),
                             Content = "This is the content of the second post.",
-                            CreatedAt = new DateTime(2024, 10, 12, 11, 44, 55, 284, DateTimeKind.Utc).AddTicks(1210),
+                            CreatedAt = new DateTime(2024, 10, 12, 18, 53, 53, 995, DateTimeKind.Local).AddTicks(1907),
                             Title = "Post2"
                         },
                         new
                         {
-                            Id = new Guid("9598e5f7-afa9-4e77-b41a-1ce3fd25b7f7"),
+                            Id = new Guid("3ee84e44-16a8-469f-950a-d40b78ebe4da"),
                             AuthorId = new Guid("02f588e5-942d-4dbe-a6ae-046a7f60e9e4"),
                             Content = "This is the content of the first post.",
-                            CreatedAt = new DateTime(2024, 10, 12, 11, 44, 55, 284, DateTimeKind.Utc).AddTicks(1233),
+                            CreatedAt = new DateTime(2024, 10, 12, 18, 53, 53, 995, DateTimeKind.Local).AddTicks(1914),
                             Title = "Post3"
                         },
                         new
                         {
-                            Id = new Guid("c1136f7f-c1b4-4cc3-9c4f-43becc9cf8b2"),
+                            Id = new Guid("7c14abff-69df-4f6e-957e-e0733e653a22"),
                             AuthorId = new Guid("b1b62bb0-17b6-4401-a0c7-54c8279b8d0d"),
                             Content = "This is the content of the second post.",
-                            CreatedAt = new DateTime(2024, 10, 12, 11, 44, 55, 284, DateTimeKind.Utc).AddTicks(1237),
+                            CreatedAt = new DateTime(2024, 10, 12, 18, 53, 53, 995, DateTimeKind.Local).AddTicks(1920),
                             Title = "Post4"
                         },
                         new
                         {
-                            Id = new Guid("3ca0473e-e83c-4bed-860b-72aaafd8d37c"),
+                            Id = new Guid("613c1d22-19e3-4894-a542-e19a224caf92"),
                             AuthorId = new Guid("02f588e5-942d-4dbe-a6ae-046a7f60e9e4"),
                             Content = "This is the content of the first post.",
-                            CreatedAt = new DateTime(2024, 10, 12, 11, 44, 55, 284, DateTimeKind.Utc).AddTicks(1241),
+                            CreatedAt = new DateTime(2024, 10, 12, 18, 53, 53, 995, DateTimeKind.Local).AddTicks(1945),
                             Title = "Post5"
                         },
                         new
                         {
-                            Id = new Guid("172a6883-7a3e-48e7-9f20-5be7110d8323"),
+                            Id = new Guid("cf1eff28-f6cd-4c42-b344-8a51b7292c5e"),
                             AuthorId = new Guid("b1b62bb0-17b6-4401-a0c7-54c8279b8d0d"),
                             Content = "This is the content of the second post.",
-                            CreatedAt = new DateTime(2024, 10, 12, 11, 44, 55, 284, DateTimeKind.Utc).AddTicks(1245),
+                            CreatedAt = new DateTime(2024, 10, 12, 18, 53, 53, 995, DateTimeKind.Local).AddTicks(1950),
                             Title = "Post6"
                         });
                 });
@@ -222,6 +222,18 @@ namespace WebApiSchool.Migrations
                     b.HasKey("GUID");
 
                     b.ToTable("PermissionGroups");
+
+                    b.HasData(
+                        new
+                        {
+                            GUID = new Guid("0e9f9c94-1437-4ff9-8d12-0000fe93fd71"),
+                            Name = "admin"
+                        },
+                        new
+                        {
+                            GUID = new Guid("f9f68922-9c6d-4142-bc8c-000ab06b5ab3"),
+                            Name = "user"
+                        });
                 });
 
             modelBuilder.Entity("WebApiSchool.DataAccess.Models.Review", b =>
@@ -333,6 +345,22 @@ namespace WebApiSchool.Migrations
                     b.HasIndex("PermissionGroupGUID");
 
                     b.ToTable("Users");
+
+                    b.HasData(
+                        new
+                        {
+                            GUID = new Guid("02f588e5-942d-4dbe-a6ae-046a7f60e9e4"),
+                            Password = "11",
+                            PermissionGroupGUID = new Guid("0e9f9c94-1437-4ff9-8d12-0000fe93fd71"),
+                            Username = "11"
+                        },
+                        new
+                        {
+                            GUID = new Guid("b1b62bb0-17b6-4401-a0c7-54c8279b8d0d"),
+                            Password = "22",
+                            PermissionGroupGUID = new Guid("f9f68922-9c6d-4142-bc8c-000ab06b5ab3"),
+                            Username = "22"
+                        });
                 });
 
             modelBuilder.Entity("WebApiSchool.DataAccess.Models.Corporate", b =>

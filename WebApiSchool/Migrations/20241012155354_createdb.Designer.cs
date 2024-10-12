@@ -12,8 +12,8 @@ using WebApiSchool.DataAccess;
 namespace WebApiSchool.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240519081704_createDb2")]
-    partial class createDb2
+    [Migration("20241012155354_createdb")]
+    partial class createdb
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,6 +24,89 @@ namespace WebApiSchool.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
+            modelBuilder.Entity("WebApiSchool.DataAccess.Entities.Post", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("AuthorId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Content")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AuthorId");
+
+                    b.HasIndex("Title");
+
+                    b.ToTable("Posts", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("315ec022-73f0-4014-a96d-380e099b99e4"),
+                            AuthorId = new Guid("02f588e5-942d-4dbe-a6ae-046a7f60e9e4"),
+                            Content = "This is the content of the first post.",
+                            CreatedAt = new DateTime(2024, 10, 12, 18, 53, 53, 995, DateTimeKind.Local).AddTicks(1879),
+                            Title = "Post1"
+                        },
+                        new
+                        {
+                            Id = new Guid("f1813a22-bad2-4d5a-a9df-f8d0f7ed4b4a"),
+                            AuthorId = new Guid("b1b62bb0-17b6-4401-a0c7-54c8279b8d0d"),
+                            Content = "This is the content of the second post.",
+                            CreatedAt = new DateTime(2024, 10, 12, 18, 53, 53, 995, DateTimeKind.Local).AddTicks(1907),
+                            Title = "Post2"
+                        },
+                        new
+                        {
+                            Id = new Guid("3ee84e44-16a8-469f-950a-d40b78ebe4da"),
+                            AuthorId = new Guid("02f588e5-942d-4dbe-a6ae-046a7f60e9e4"),
+                            Content = "This is the content of the first post.",
+                            CreatedAt = new DateTime(2024, 10, 12, 18, 53, 53, 995, DateTimeKind.Local).AddTicks(1914),
+                            Title = "Post3"
+                        },
+                        new
+                        {
+                            Id = new Guid("7c14abff-69df-4f6e-957e-e0733e653a22"),
+                            AuthorId = new Guid("b1b62bb0-17b6-4401-a0c7-54c8279b8d0d"),
+                            Content = "This is the content of the second post.",
+                            CreatedAt = new DateTime(2024, 10, 12, 18, 53, 53, 995, DateTimeKind.Local).AddTicks(1920),
+                            Title = "Post4"
+                        },
+                        new
+                        {
+                            Id = new Guid("613c1d22-19e3-4894-a542-e19a224caf92"),
+                            AuthorId = new Guid("02f588e5-942d-4dbe-a6ae-046a7f60e9e4"),
+                            Content = "This is the content of the first post.",
+                            CreatedAt = new DateTime(2024, 10, 12, 18, 53, 53, 995, DateTimeKind.Local).AddTicks(1945),
+                            Title = "Post5"
+                        },
+                        new
+                        {
+                            Id = new Guid("cf1eff28-f6cd-4c42-b344-8a51b7292c5e"),
+                            AuthorId = new Guid("b1b62bb0-17b6-4401-a0c7-54c8279b8d0d"),
+                            Content = "This is the content of the second post.",
+                            CreatedAt = new DateTime(2024, 10, 12, 18, 53, 53, 995, DateTimeKind.Local).AddTicks(1950),
+                            Title = "Post6"
+                        });
+                });
 
             modelBuilder.Entity("WebApiSchool.DataAccess.Models.Course", b =>
                 {
@@ -142,6 +225,18 @@ namespace WebApiSchool.Migrations
                     b.HasKey("GUID");
 
                     b.ToTable("PermissionGroups");
+
+                    b.HasData(
+                        new
+                        {
+                            GUID = new Guid("0e9f9c94-1437-4ff9-8d12-0000fe93fd71"),
+                            Name = "admin"
+                        },
+                        new
+                        {
+                            GUID = new Guid("f9f68922-9c6d-4142-bc8c-000ab06b5ab3"),
+                            Name = "user"
+                        });
                 });
 
             modelBuilder.Entity("WebApiSchool.DataAccess.Models.Review", b =>
@@ -253,6 +348,22 @@ namespace WebApiSchool.Migrations
                     b.HasIndex("PermissionGroupGUID");
 
                     b.ToTable("Users");
+
+                    b.HasData(
+                        new
+                        {
+                            GUID = new Guid("02f588e5-942d-4dbe-a6ae-046a7f60e9e4"),
+                            Password = "11",
+                            PermissionGroupGUID = new Guid("0e9f9c94-1437-4ff9-8d12-0000fe93fd71"),
+                            Username = "11"
+                        },
+                        new
+                        {
+                            GUID = new Guid("b1b62bb0-17b6-4401-a0c7-54c8279b8d0d"),
+                            Password = "22",
+                            PermissionGroupGUID = new Guid("f9f68922-9c6d-4142-bc8c-000ab06b5ab3"),
+                            Username = "22"
+                        });
                 });
 
             modelBuilder.Entity("WebApiSchool.DataAccess.Models.Corporate", b =>
@@ -283,6 +394,17 @@ namespace WebApiSchool.Migrations
                         .HasColumnType("int");
 
                     b.ToTable("Individuals", (string)null);
+                });
+
+            modelBuilder.Entity("WebApiSchool.DataAccess.Entities.Post", b =>
+                {
+                    b.HasOne("WebApiSchool.DataAccess.Models.User", "Author")
+                        .WithMany("Posts")
+                        .HasForeignKey("AuthorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Author");
                 });
 
             modelBuilder.Entity("WebApiSchool.DataAccess.Models.Enrollment", b =>
@@ -451,6 +573,11 @@ namespace WebApiSchool.Migrations
             modelBuilder.Entity("WebApiSchool.DataAccess.Models.Schedule", b =>
                 {
                     b.Navigation("Sections");
+                });
+
+            modelBuilder.Entity("WebApiSchool.DataAccess.Models.User", b =>
+                {
+                    b.Navigation("Posts");
                 });
 #pragma warning restore 612, 618
         }

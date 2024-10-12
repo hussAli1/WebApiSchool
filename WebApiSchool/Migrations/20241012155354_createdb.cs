@@ -3,10 +3,12 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
+#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
+
 namespace WebApiSchool.Migrations
 {
     /// <inheritdoc />
-    public partial class createDb : Migration
+    public partial class createdb : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -166,8 +168,7 @@ namespace WebApiSchool.Migrations
                     GUID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Username = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Password = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    PermissionGroupGUID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    PermissionGroupId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    PermissionGroupGUID = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -217,6 +218,28 @@ namespace WebApiSchool.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Posts",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Title = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
+                    Content = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    AuthorId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Posts", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Posts_Users_AuthorId",
+                        column: x => x.AuthorId,
+                        principalTable: "Users",
+                        principalColumn: "GUID",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Enrollments",
                 columns: table => new
                 {
@@ -240,6 +263,37 @@ namespace WebApiSchool.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.InsertData(
+                table: "PermissionGroups",
+                columns: new[] { "GUID", "Name" },
+                values: new object[,]
+                {
+                    { new Guid("0e9f9c94-1437-4ff9-8d12-0000fe93fd71"), "admin" },
+                    { new Guid("f9f68922-9c6d-4142-bc8c-000ab06b5ab3"), "user" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Users",
+                columns: new[] { "GUID", "Password", "PermissionGroupGUID", "Username" },
+                values: new object[,]
+                {
+                    { new Guid("02f588e5-942d-4dbe-a6ae-046a7f60e9e4"), "11", new Guid("0e9f9c94-1437-4ff9-8d12-0000fe93fd71"), "11" },
+                    { new Guid("b1b62bb0-17b6-4401-a0c7-54c8279b8d0d"), "22", new Guid("f9f68922-9c6d-4142-bc8c-000ab06b5ab3"), "22" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Posts",
+                columns: new[] { "Id", "AuthorId", "Content", "CreatedAt", "Title", "UpdatedAt" },
+                values: new object[,]
+                {
+                    { new Guid("315ec022-73f0-4014-a96d-380e099b99e4"), new Guid("02f588e5-942d-4dbe-a6ae-046a7f60e9e4"), "This is the content of the first post.", new DateTime(2024, 10, 12, 18, 53, 53, 995, DateTimeKind.Local).AddTicks(1879), "Post1", null },
+                    { new Guid("3ee84e44-16a8-469f-950a-d40b78ebe4da"), new Guid("02f588e5-942d-4dbe-a6ae-046a7f60e9e4"), "This is the content of the first post.", new DateTime(2024, 10, 12, 18, 53, 53, 995, DateTimeKind.Local).AddTicks(1914), "Post3", null },
+                    { new Guid("613c1d22-19e3-4894-a542-e19a224caf92"), new Guid("02f588e5-942d-4dbe-a6ae-046a7f60e9e4"), "This is the content of the first post.", new DateTime(2024, 10, 12, 18, 53, 53, 995, DateTimeKind.Local).AddTicks(1945), "Post5", null },
+                    { new Guid("7c14abff-69df-4f6e-957e-e0733e653a22"), new Guid("b1b62bb0-17b6-4401-a0c7-54c8279b8d0d"), "This is the content of the second post.", new DateTime(2024, 10, 12, 18, 53, 53, 995, DateTimeKind.Local).AddTicks(1920), "Post4", null },
+                    { new Guid("cf1eff28-f6cd-4c42-b344-8a51b7292c5e"), new Guid("b1b62bb0-17b6-4401-a0c7-54c8279b8d0d"), "This is the content of the second post.", new DateTime(2024, 10, 12, 18, 53, 53, 995, DateTimeKind.Local).AddTicks(1950), "Post6", null },
+                    { new Guid("f1813a22-bad2-4d5a-a9df-f8d0f7ed4b4a"), new Guid("b1b62bb0-17b6-4401-a0c7-54c8279b8d0d"), "This is the content of the second post.", new DateTime(2024, 10, 12, 18, 53, 53, 995, DateTimeKind.Local).AddTicks(1907), "Post2", null }
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_Enrollments_ParticipantGUID",
                 table: "Enrollments",
@@ -251,6 +305,16 @@ namespace WebApiSchool.Migrations
                 column: "OfficeGUID",
                 unique: true,
                 filter: "[OfficeGUID] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Posts_AuthorId",
+                table: "Posts",
+                column: "AuthorId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Posts_Title",
+                table: "Posts",
+                column: "Title");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Reviews_CourseGUID",
@@ -291,10 +355,10 @@ namespace WebApiSchool.Migrations
                 name: "Individuals");
 
             migrationBuilder.DropTable(
-                name: "Reviews");
+                name: "Posts");
 
             migrationBuilder.DropTable(
-                name: "Users");
+                name: "Reviews");
 
             migrationBuilder.DropTable(
                 name: "Sections");
@@ -303,7 +367,7 @@ namespace WebApiSchool.Migrations
                 name: "Particpants");
 
             migrationBuilder.DropTable(
-                name: "PermissionGroups");
+                name: "Users");
 
             migrationBuilder.DropTable(
                 name: "Courses");
@@ -313,6 +377,9 @@ namespace WebApiSchool.Migrations
 
             migrationBuilder.DropTable(
                 name: "Schedules");
+
+            migrationBuilder.DropTable(
+                name: "PermissionGroups");
 
             migrationBuilder.DropTable(
                 name: "Offices");
