@@ -37,5 +37,13 @@ namespace WebApiSchool.Repository
 
             return await query.CountAsync();
         }
+        public async Task<Post?> SelectById(object id)
+        {
+            return await _dbContext.Posts
+                .AsNoTracking() 
+                .Include(p => p.Author) 
+                .FirstOrDefaultAsync(p => p.Id == (Guid)id); 
+        }
+
     }
 }

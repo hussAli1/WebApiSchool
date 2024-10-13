@@ -9,6 +9,7 @@ using WebApiSchool.DataAccess.Models;
 using WebApiSchool.DTO;
 using WebApiSchool.Models;
 using WebApiSchool.MyLogger;
+using WebApiSchool.Repository;
 using WebApiSchool.Repository.Interfaces;
 using WebApiSchool.Services.Interfaces;
 
@@ -16,7 +17,6 @@ namespace WebApiSchool.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
     public class PostsController : ControllerBase
     {
         private readonly IRepository<Course> _repository;
@@ -26,10 +26,10 @@ namespace WebApiSchool.Controllers
         private readonly IPostsService _postsService;
 
         public PostsController(IRepository<Course> repository,
-                               ILoggerManager logger,
-                               IMapper mapper,
-                               ResponseModel responseModel,
-                               IPostsService postsService)
+                ILoggerManager logger,
+                IMapper mapper,
+                ResponseModel responseModel,
+                IPostsService postsService)
         {
             _repository = repository;
             _logger = logger;
@@ -39,17 +39,18 @@ namespace WebApiSchool.Controllers
         }
 
         [HttpGet("GetPosts")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<ResponseModel>> GetPosts(int page = 1, int pageSize = 10, string search = "")
         {
             try
             {
                 var posts = await _postsService.GetPostsAsync(page, pageSize, search);
 
-                if (posts == null || !(posts).Any())
-                {
-                    return NoContent();
-                }
-
+                if (posts == null || !(posts).Any()) return NoContent();
+                
                 var postDTOs = _mapper.Map<List<PostDTO>>(posts);
 
                 var response = new
@@ -69,6 +70,52 @@ namespace WebApiSchool.Controllers
                 _responseModel.Message = ex.Message;
                 return BadRequest(_responseModel);
             }
+        }
+
+        [HttpGet("GetById/{id}")]
+        public async Task<ActionResult<ResponseModel>> GetById(Guid id)
+        {
+            try
+            {
+                var post = await _postsService.GetPostByIdAsync(id);
+
+                if (post == null)
+                {
+                    _responseModel.Status = "NotFound";
+                    _responseModel.Message = "Post not found by the specified ID.";
+                    return NotFound(_responseModel);
+                }
+
+                var postDTOs = _mapper.Map<PostDTO>(post);
+
+                _responseModel.Status = "Success";
+                _responseModel.Data = postDTOs;
+
+                return Ok(_responseModel); // Return the response model with the post
+            }
+            catch (Exception ex)
+            {
+                _responseModel.Status = "Error";
+                _responseModel.Message = ex.Message;
+                return StatusCode(500, _responseModel); // Return a 500 Internal Server Error
+            }
+        }
+
+        [HttpDelete("DeletePost/{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> DeletePost(Guid id)
+        {
+            var result = await _postsService.DeletePostAsync(id);
+
+            if (!result)
+            {
+                return NotFound(new { message = $"Post with id {id} not found or could not be deleted." });
+            }
+
+            return Ok(new { message = $"Post with id {id} was deleted successfully." });
         }
     }
 }

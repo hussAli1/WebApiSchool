@@ -30,14 +30,32 @@ namespace WebApiSchool.Services
             throw new NotImplementedException();
         }
 
-        public Task<bool> DeletePostAsync(int id)
+        public async Task<bool> DeletePostAsync(Guid id)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var post = await _unitOfWork.Posts.SelectById(id);
+
+                if (post == null) return false;
+                
+                _unitOfWork.Posts.Delete(post);
+                await _unitOfWork.CompleteAsync();
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"An error Delete post: {ex.Message}", nameof(PostsService), nameof(DeletePostAsync));
+                return false;
+            }
         }
 
-        public Task<Post> GetPostByIdAsync(int id)
+
+        public async Task<Post?> GetPostByIdAsync(Guid id)
         {
-            throw new NotImplementedException();
+            var post = await _unitOfWork.Posts.SelectById(id);
+
+            return post; 
         }
 
         public async Task<List<Post>> GetPostsAsync(int page, int pageSize, string search = "")
