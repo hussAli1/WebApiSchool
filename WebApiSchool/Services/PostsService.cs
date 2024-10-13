@@ -2,6 +2,8 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using WebApiSchool.DataAccess.Entities;
+using WebApiSchool.DataAccess.Models;
+using WebApiSchool.DTO;
 using WebApiSchool.Models;
 using WebApiSchool.MyLogger;
 using WebApiSchool.Repository;
@@ -25,9 +27,24 @@ namespace WebApiSchool.Services
             _logger = logger;
         }
 
-        public Task<Post> CreatePostAsync(Post post)
+        public async Task<Post> CreatePostAsync(PostCreateDTO postDto)
         {
-            throw new NotImplementedException();
+            var author = await _unitOfWork.Users.GetUserByUsernameAsync(postDto.Username);
+            if (author == null)
+            {
+                throw new ArgumentException("Invalid Username provided");
+            }
+
+
+            var newPost = _mapper.Map<Post>(postDto);
+
+            newPost.AuthorId = author.GUID;
+            newPost.Author = author;      
+
+            await _unitOfWork.Posts.CreateAsync(newPost);
+            await _unitOfWork.CompleteAsync();
+
+            return newPost; 
         }
 
         public async Task<bool> DeletePostAsync(Guid id)

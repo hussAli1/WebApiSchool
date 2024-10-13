@@ -20,5 +20,9 @@ namespace WebApiSchool.DataAccess.Models
 
         public ICollection<Post> Posts { get; set; }
 
+        public static implicit operator User(Task<User> v)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

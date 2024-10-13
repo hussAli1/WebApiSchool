@@ -17,7 +17,13 @@ namespace WebApiSchool.Configurations
             .ForMember(dest => dest.GUID, opt => opt.MapFrom(src => Guid.NewGuid()));
 
             CreateMap<Post, PostDTO>()
-           .ForMember(dest => dest.Username, opt => opt.MapFrom(src => src.Author.Username)); 
+           .ForMember(dest => dest.Username, opt => opt.MapFrom(src => src.Author.Username));
+
+
+            CreateMap<PostCreateDTO, Post>()
+            .ForMember(dest => dest.AuthorId, opt => opt.Ignore()) 
+            .ForMember(dest => dest.Author, opt => opt.Ignore())  
+            .ForMember(dest => dest.Id, opt => opt.MapFrom(src => Guid.NewGuid())); 
         }
     }
 }

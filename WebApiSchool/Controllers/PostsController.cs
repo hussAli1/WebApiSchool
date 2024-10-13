@@ -11,13 +11,14 @@ using WebApiSchool.Models;
 using WebApiSchool.MyLogger;
 using WebApiSchool.Repository;
 using WebApiSchool.Repository.Interfaces;
+using WebApiSchool.Services;
 using WebApiSchool.Services.Interfaces;
 
 namespace WebApiSchool.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class PostsController : ControllerBase
+    public class PostsController : BaseController
     {
         private readonly IRepository<Course> _repository;
         private readonly ILoggerManager _logger;
@@ -72,6 +73,36 @@ namespace WebApiSchool.Controllers
             }
         }
 
+        [HttpPost("CreatePost")]
+        public async Task<IActionResult> CreatePost([FromBody] PostCreateDTO postDto)
+        {
+            try
+            {
+                var newPost = await _postsService.CreatePostAsync(postDto);
+
+                if (newPost == null)
+                {
+                    return CreateErrorResponse("Failed to create the post."); 
+                }
+
+                var postDTOs = _mapper.Map<PostDTO>(newPost);
+
+                _responseModel.Data = postDTOs;
+                _responseModel.Status = "Success";
+                _responseModel.Message = "Post created successfully.";
+
+                return Ok(_responseModel); 
+            }
+            catch (ArgumentException ex)
+            {
+                return CreateErrorResponse(ex.Message); 
+            }
+            catch (Exception ex)
+            {
+                return CreateErrorResponse("An unexpected error occurred."); 
+            }
+        }
+
         [HttpGet("GetById/{id}")]
         public async Task<ActionResult<ResponseModel>> GetById(Guid id)
         {
@@ -91,7 +122,7 @@ namespace WebApiSchool.Controllers
                 _responseModel.Status = "Success";
                 _responseModel.Data = postDTOs;
 
-                return Ok(_responseModel); // Return the response model with the post
+                return Ok(_responseModel);
             }
             catch (Exception ex)
             {
