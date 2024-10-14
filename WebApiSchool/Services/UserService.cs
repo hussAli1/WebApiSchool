@@ -46,7 +46,7 @@ namespace WebApiSchool.Services
 
             return new LoginResponseDTO
             {
-                Username = model.Username,
+                UserGuid = user.GUID,
                 Token = token
             };
         }

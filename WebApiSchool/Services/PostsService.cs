@@ -27,7 +27,7 @@ namespace WebApiSchool.Services
             _logger = logger;
         }
 
-        public async Task<Post> CreatePostAsync(PostCreateDTO postDto)
+        public async Task<Post> CreateAsync(PostCreateDTO postDto)
         {
             var author = await _unitOfWork.Users.GetUserByUsernameAsync(postDto.Username);
             if (author == null)
@@ -47,7 +47,7 @@ namespace WebApiSchool.Services
             return newPost; 
         }
 
-        public async Task<bool> DeletePostAsync(Guid id)
+        public async Task<bool> DeleteAsync(Guid id)
         {
             try
             {
@@ -62,36 +62,53 @@ namespace WebApiSchool.Services
             }
             catch (Exception ex)
             {
-                _logger.LogError($"An error Delete post: {ex.Message}", nameof(PostsService), nameof(DeletePostAsync));
+                _logger.LogError($"An error Delete post: {ex.Message}", nameof(PostsService), nameof(DeleteAsync));
                 return false;
             }
         }
 
 
-        public async Task<Post?> GetPostByIdAsync(Guid id)
+        public async Task<Post> GetByIdAsync(Guid id)
         {
             var post = await _unitOfWork.Posts.SelectById(id);
-
-            return post; 
+            return post;
         }
 
-        public async Task<List<Post>> GetPostsAsync(int page, int pageSize, string search = "")
+        public async Task<Tuple<int, List<Post>>> GetAsync(int page, int pageSize, string search = "")
         {
             try
             {
-                return await _unitOfWork.Posts.SearchAsync(search, page, pageSize);
+                var posts =  await _unitOfWork.Posts.SearchAsync(search, page, pageSize);
+                var totalPosts = await _unitOfWork.Posts.Count();
+
+                return new Tuple<int, List<Post>>(totalPosts, posts);
 
             }
             catch (Exception ex)
             {
-                _logger.LogError($"An error occurred while fetching posts: {ex.Message}", nameof(PostsService), nameof(GetPostsAsync));
+                _logger.LogError($"An error occurred while fetching posts: {ex.Message}", nameof(PostsService), nameof(GetAsync));
                 throw; 
             }
         }
 
-        public Task<Post> UpdatePostAsync(int id, Post post)
+        public async Task<Post> UpdateAsync(Guid id, PostUpdateDTO postDTO)
         {
-            throw new NotImplementedException();
+            var existingPost = await _unitOfWork.Posts.SelectById(id);
+
+            if (existingPost == null)
+            {
+                throw new KeyNotFoundException($"Post with ID {id} not found.");
+            }
+
+            var auther = await _unitOfWork.Users.SelectById(postDTO.AuthorId);
+
+            _mapper.Map(postDTO, existingPost);
+            existingPost.Author = auther;
+
+            _unitOfWork.Posts.Update(existingPost);
+            await _unitOfWork.CompleteAsync();
+
+            return existingPost;
         }
     }
 }

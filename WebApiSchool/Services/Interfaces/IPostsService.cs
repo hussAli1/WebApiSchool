@@ -6,11 +6,11 @@ namespace WebApiSchool.Services.Interfaces
 {
     public interface IPostsService
     {
-        Task<List<Post>> GetPostsAsync(int page, int pageSize, string search = "");
-        Task<Post> GetPostByIdAsync(Guid id);
-        Task<Post> CreatePostAsync(PostCreateDTO post);
-        Task<Post> UpdatePostAsync(int id, Post post);
-        Task<bool> DeletePostAsync(Guid id);
+        Task<Tuple<int, List<Post>>> GetAsync(int page, int pageSize, string search = "");
+        Task<Post> GetByIdAsync(Guid id);
+        Task<Post> CreateAsync(PostCreateDTO post);
+        Task<Post> UpdateAsync(Guid id, PostUpdateDTO post);
+        Task<bool> DeleteAsync(Guid id);
     }
 
 }

@@ -19,6 +19,12 @@ namespace WebApiSchool.Configurations
             CreateMap<Post, PostDTO>()
            .ForMember(dest => dest.Username, opt => opt.MapFrom(src => src.Author.Username));
 
+            CreateMap<PostUpdateDTO, Post>()
+           .ForMember(dest => dest.UpdatedAt, opt => opt.MapFrom(src => src.UpdatedAt));
+
+            //  CreateMap<Post, PostDTO>()
+            //.ForMember(dest => dest.Username, opt => opt.MapFrom(src => src.Author.Username))
+            //.ForMember(dest => dest.CreatedAt, opt => opt.MapFrom(src => src.CreatedAt.ToString("yyyy-MM-dd")));  // Format date
 
             CreateMap<PostCreateDTO, Post>()
             .ForMember(dest => dest.AuthorId, opt => opt.Ignore()) 

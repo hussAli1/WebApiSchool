@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Hosting;
 using System.Net;
@@ -48,16 +49,16 @@ namespace WebApiSchool.Controllers
         {
             try
             {
-                var posts = await _postsService.GetPostsAsync(page, pageSize, search);
+                var result= await _postsService.GetAsync(page, pageSize, search);
 
-                if (posts == null || !(posts).Any()) return NoContent();
+                if (result.Item2 == null || !(result.Item2).Any()) return NoContent();
                 
-                var postDTOs = _mapper.Map<List<PostDTO>>(posts);
+                var postDTOs = _mapper.Map<List<PostDTO>>(result.Item2);
 
                 var response = new
                 {
                     posts = postDTOs,
-                    totalRecords = posts.Count
+                    totalRecords = result.Item1
                 };
 
                 _responseModel.Data = response;
@@ -78,7 +79,7 @@ namespace WebApiSchool.Controllers
         {
             try
             {
-                var newPost = await _postsService.CreatePostAsync(postDto);
+                var newPost = await _postsService.CreateAsync(postDto);
 
                 if (newPost == null)
                 {
@@ -103,12 +104,48 @@ namespace WebApiSchool.Controllers
             }
         }
 
+        [HttpPut("UpdatePost/{id}")]
+        public async Task<IActionResult> UpdatePost(Guid id, [FromBody] PostUpdateDTO postDTO)
+        {
+            if (!ModelState.IsValid)
+            {
+                _responseModel.Status = "ValidationFailed";
+                _responseModel.Message = "Invalid data.";
+                return BadRequest(_responseModel);
+            }
+
+            try
+            {
+                var updatedPost = await _postsService.UpdateAsync(id, postDTO);
+
+                var postDTOs = _mapper.Map<PostDTO>(updatedPost);
+
+                _responseModel.Status = "Success";
+                _responseModel.Data = postDTOs;
+
+                return Ok(_responseModel);
+            }
+            catch (KeyNotFoundException ex)
+            {
+                _responseModel.Status = "NotFound";
+                _responseModel.Message = ex.Message;
+                return NotFound(_responseModel);
+            }
+            catch (Exception ex)
+            {
+                _responseModel.Status = "Error";
+                _responseModel.Message = ex.Message;
+                return StatusCode(500, _responseModel);
+            }
+        }
+
+
         [HttpGet("GetById/{id}")]
         public async Task<ActionResult<ResponseModel>> GetById(Guid id)
         {
             try
             {
-                var post = await _postsService.GetPostByIdAsync(id);
+                var post = await _postsService.GetByIdAsync(id);
 
                 if (post == null)
                 {
@@ -128,18 +165,18 @@ namespace WebApiSchool.Controllers
             {
                 _responseModel.Status = "Error";
                 _responseModel.Message = ex.Message;
-                return StatusCode(500, _responseModel); // Return a 500 Internal Server Error
+                return StatusCode(500, _responseModel);
             }
         }
 
-        [HttpDelete("DeletePost/{id}")]
+        [HttpDelete("Delete/{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> DeletePost(Guid id)
+        public async Task<IActionResult> Delete(Guid id)
         {
-            var result = await _postsService.DeletePostAsync(id);
+            var result = await _postsService.DeleteAsync(id);
 
             if (!result)
             {
