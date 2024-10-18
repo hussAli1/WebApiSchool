@@ -1,5 +1,5 @@
 ﻿using WebApiSchool.DataAccess.Entities;
-using WebApiSchool.DTO;
+using WebApiSchool.DTO.Posts;
 using WebApiSchool.Models;
 
 namespace WebApiSchool.Services.Interfaces

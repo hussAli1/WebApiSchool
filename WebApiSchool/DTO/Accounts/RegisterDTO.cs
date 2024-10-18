@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace WebApiSchool.DTO
+namespace WebApiSchool.DTO.Accounts
 {
     public class RegisterDTO
     {

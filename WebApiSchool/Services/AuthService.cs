@@ -4,6 +4,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using WebApiSchool.Controllers;
+using WebApiSchool.DataAccess.Models;
 using WebApiSchool.Models;
 using WebApiSchool.MyLogger;
 using WebApiSchool.Services.Interfaces;
@@ -24,14 +25,15 @@ namespace WebApiSchool.Services
             _logger = logger;
         }
 
-        public string GenerateJwtToken(string username, string role)
+        public string GenerateJwtToken(User user)
         {
             try
             {
                 var authClaims = new ClaimsIdentity( new[]
                 {
-                     new Claim(ClaimTypes.Name, username),
-                     new Claim(ClaimTypes.Role, role)
+                     new Claim(ClaimTypes.Name, user.Username),
+                     new Claim(ClaimTypes.Role, user.PermissionGroup.Name),
+                     new Claim(ClaimTypes.NameIdentifier, user.GUID.ToString())
                 });
 
                 var listPermissions = new List<string>();

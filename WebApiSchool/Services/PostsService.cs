@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using WebApiSchool.DataAccess.Entities;
 using WebApiSchool.DataAccess.Models;
-using WebApiSchool.DTO;
+using WebApiSchool.DTO.Posts;
 using WebApiSchool.Models;
 using WebApiSchool.MyLogger;
 using WebApiSchool.Repository;
@@ -17,29 +17,25 @@ namespace WebApiSchool.Services
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
         private readonly ILoggerManager _logger;
+        private readonly IRequestService _requestService;
         public PostsService(
                   IUnitOfWork unitOfWork, 
                   IMapper mapper,
-                  ILoggerManager logger)
+                  ILoggerManager logger,
+                  IRequestService requestService)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
             _logger = logger;
+            _requestService = requestService;
         }
 
         public async Task<Post> CreateAsync(PostCreateDTO postDto)
         {
-            var author = await _unitOfWork.Users.GetUserByUsernameAsync(postDto.Username);
-            if (author == null)
-            {
-                throw new ArgumentException("Invalid Username provided");
-            }
-
-
+            var AuthorId = _requestService.GetUserGuid();
             var newPost = _mapper.Map<Post>(postDto);
 
-            newPost.AuthorId = author.GUID;
-            newPost.Author = author;      
+            newPost.AuthorId = Guid.Parse(AuthorId);
 
             await _unitOfWork.Posts.CreateAsync(newPost);
             await _unitOfWork.CompleteAsync();
@@ -100,9 +96,11 @@ namespace WebApiSchool.Services
                 throw new KeyNotFoundException($"Post with ID {id} not found.");
             }
 
-            var auther = await _unitOfWork.Users.SelectById(postDTO.AuthorId);
+            var AuthorId = _requestService.GetUserGuid();
+            var auther = await _unitOfWork.Users.SelectById(Guid.Parse(AuthorId));
 
             _mapper.Map(postDTO, existingPost);
+            existingPost.AuthorId = auther.GUID;
             existingPost.Author = auther;
 
             _unitOfWork.Posts.Update(existingPost);

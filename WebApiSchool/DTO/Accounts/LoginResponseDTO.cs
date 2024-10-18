@@ -1,4 +1,4 @@
-﻿namespace WebApiSchool.DTO
+﻿namespace WebApiSchool.DTO.Accounts
 {
     public class LoginResponseDTO
     {

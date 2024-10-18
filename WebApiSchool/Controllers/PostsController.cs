@@ -5,9 +5,10 @@ using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Hosting;
 using System.Net;
+using System.Security.Claims;
 using WebApiSchool.DataAccess.Entities;
 using WebApiSchool.DataAccess.Models;
-using WebApiSchool.DTO;
+using WebApiSchool.DTO.Posts;
 using WebApiSchool.Models;
 using WebApiSchool.MyLogger;
 using WebApiSchool.Repository;
@@ -26,18 +27,21 @@ namespace WebApiSchool.Controllers
         private readonly ResponseModel _responseModel;
         private readonly IMapper _mapper;
         private readonly IPostsService _postsService;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
         public PostsController(IRepository<Course> repository,
                 ILoggerManager logger,
                 IMapper mapper,
                 ResponseModel responseModel,
-                IPostsService postsService)
+                IPostsService postsService,
+                IHttpContextAccessor httpContextAccessor)
         {
             _repository = repository;
             _logger = logger;
             _responseModel = responseModel;
             _mapper = mapper;
             _postsService = postsService;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         [HttpGet("GetPosts")]
@@ -49,7 +53,8 @@ namespace WebApiSchool.Controllers
         {
             try
             {
-                var result= await _postsService.GetAsync(page, pageSize, search);
+
+                var result = await _postsService.GetAsync(page, pageSize, search);
 
                 if (result.Item2 == null || !(result.Item2).Any()) return NoContent();
                 

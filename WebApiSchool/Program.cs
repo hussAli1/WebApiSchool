@@ -23,6 +23,8 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("connectionString"));
 });
 
+builder.Services.AddHttpContextAccessor();
+
 
 builder.Services.AddCors(options =>
 {
@@ -76,6 +78,7 @@ builder.Services.AddScoped(typeof(IRepository<>), typeof(BaseRepository<>));
 builder.Services.AddScoped(typeof(IServices<>), typeof(BaseServices<>));
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IPostsService, PostsService>();
+builder.Services.AddScoped<IRequestService, RequestService>();
 builder.Services.AddTransient<AuthService>();
 builder.Services.AddMemoryCache();
 builder.Services.AddSingleton<ICacheManagement, CacheManagement>();

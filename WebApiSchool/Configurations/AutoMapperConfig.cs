@@ -2,6 +2,8 @@
 using WebApiSchool.DataAccess.Entities;
 using WebApiSchool.DataAccess.Models;
 using WebApiSchool.DTO;
+using WebApiSchool.DTO.Accounts;
+using WebApiSchool.DTO.Posts;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace WebApiSchool.Configurations

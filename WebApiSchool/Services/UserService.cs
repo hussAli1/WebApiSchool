@@ -5,6 +5,7 @@ using WebApiSchool.Services.Interfaces;
 using WebApiSchool.Exceptions;
 using AutoMapper;
 using System.Text;
+using WebApiSchool.DTO.Accounts;
 
 namespace WebApiSchool.Services
 {
@@ -42,7 +43,7 @@ namespace WebApiSchool.Services
             }
 
             var key = Encoding.ASCII.GetBytes(_configuration.GetValue<string>("JWTSecret"));
-            var token = _authService.GenerateJwtToken(model.Username, user.PermissionGroup.Name);
+            var token = _authService.GenerateJwtToken(user);
 
             return new LoginResponseDTO
             {

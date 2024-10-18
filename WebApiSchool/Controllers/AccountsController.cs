@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WebApiSchool.DTO;
+using WebApiSchool.DTO.Accounts;
 using WebApiSchool.Exceptions;
 using WebApiSchool.MyLogger;
 using WebApiSchool.Repository.Interfaces;
@@ -52,14 +53,17 @@ namespace WebApiSchool.Controllers
             }
         }
 
-        [HttpGet("health")]
-        public async Task<HealthResponse> HealthCheck()
+        [HttpGet]
+        [AllowAnonymous]
+        public ActionResult Index()
         {
-            return await Task.FromResult(new HealthResponse
+            var response = new
             {
-                Status = true, 
-                Message = "API is healthy"
-            });
+                Status = true,
+                Message = "API is Running..."
+            };
+
+            return Ok(response);
         }
 
         [HttpPost]

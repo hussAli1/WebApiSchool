@@ -20,8 +20,10 @@ namespace WebApiSchool.Repository
             .AsNoTracking()
             .Include(p => p.Author)
             .Where(p => string.IsNullOrEmpty(search) || p.Title.Contains(search) || p.Content.Contains(search))
+            .OrderByDescending(p => p.CreatedAt)
             .Skip((page - 1) * pageSize)
             .Take(pageSize)
+            .OrderBy(p=>p.CreatedAt)
             .ToListAsync();
 
         }

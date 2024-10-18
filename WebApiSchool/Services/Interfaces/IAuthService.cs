@@ -1,7 +1,9 @@
-﻿namespace WebApiSchool.Services.Interfaces
+﻿using WebApiSchool.DataAccess.Models;
+
+namespace WebApiSchool.Services.Interfaces
 {
     public interface IAuthService
     {
-        string GenerateJwtToken(string username, string role);
+        string GenerateJwtToken(User user);
     }
 }

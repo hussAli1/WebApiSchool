@@ -1,5 +1,6 @@
 ﻿using WebApiSchool.DataAccess.Models;
 using WebApiSchool.DTO;
+using WebApiSchool.DTO.Accounts;
 
 namespace WebApiSchool.Services.Interfaces
 {
