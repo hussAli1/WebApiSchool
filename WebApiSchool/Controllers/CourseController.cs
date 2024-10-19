@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Net;
 using WebApiSchool.DataAccess.Models;
 using WebApiSchool.DTO;
+using WebApiSchool.Models;
 using WebApiSchool.MyLogger;
 using WebApiSchool.Repository.Interfaces;
 

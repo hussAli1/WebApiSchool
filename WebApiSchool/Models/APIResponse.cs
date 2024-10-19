@@ -1,6 +1,6 @@
 ﻿using System.Net;
 
-namespace WebApiSchool.DTO
+namespace WebApiSchool.Models
 {
     public class APIResponse
     {
@@ -13,4 +13,5 @@ namespace WebApiSchool.DTO
         public dynamic Data { get; set; }
         public List<string> Errors { get; set; }
     }
+
 }

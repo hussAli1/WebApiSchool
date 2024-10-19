@@ -38,6 +38,11 @@ builder.Services.AddCors(options =>
         });
 });
 
+var appSettingsSection = builder.Configuration.GetSection("AppSettings");
+builder.Services.Configure<AppSettings>(appSettingsSection);
+var appSettings = appSettingsSection.Get<AppSettings>();
+
+
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 
@@ -88,7 +93,7 @@ builder.Services.AddSingleton<ExceptionMiddleware>();
 builder.Services.AddRepository();
 
 
-var JWTSecret = Encoding.ASCII.GetBytes(builder.Configuration.GetValue<string>("JWTSecret"));
+var JWTSecret = Encoding.ASCII.GetBytes(appSettings.JwtKey);
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;

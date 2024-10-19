@@ -13,17 +13,14 @@ namespace WebApiSchool.Services
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IAuthService _authService;
-        private readonly IConfiguration _configuration;
         private readonly IMapper _mapper;
 
         public UserService(IUnitOfWork unitOfWork,
                IAuthService authService,
-               IConfiguration configuration,
                 IMapper mapper)
         {
             _unitOfWork = unitOfWork;
             _authService = authService;
-            _configuration = configuration;
             _mapper = mapper;
         }
 
@@ -42,7 +39,6 @@ namespace WebApiSchool.Services
                 throw new UnauthorizedAccessException("اسم المستخدم وكلمة المرور غير موجودين");
             }
 
-            var key = Encoding.ASCII.GetBytes(_configuration.GetValue<string>("JWTSecret"));
             var token = _authService.GenerateJwtToken(user);
 
             return new LoginResponseDTO

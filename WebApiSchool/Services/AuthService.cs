@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -14,15 +15,14 @@ namespace WebApiSchool.Services
 
     public class AuthService : IAuthService
     {
-        private readonly IConfiguration _configuration;
-        private readonly byte[] _key;
         private readonly ILoggerManager _logger;
+        private readonly AppSettings _appSettings;
 
-        public AuthService(IConfiguration configuration , ILoggerManager logger)
+        public AuthService(ILoggerManager logger,
+            IOptions<AppSettings> appSettings)
         {
-            _configuration = configuration;
-            _key = Encoding.ASCII.GetBytes(_configuration.GetValue<string>("JWTSecret"));
             _logger = logger;
+            _appSettings = appSettings.Value;
         }
 
         public string GenerateJwtToken(User user)
@@ -43,13 +43,15 @@ namespace WebApiSchool.Services
                 {
                     authClaims.AddClaim(new Claim("Permissions", permission));
                 }
-
+                var key = Encoding.ASCII.GetBytes(_appSettings.JwtKey);
                 var tokenHandler = new JwtSecurityTokenHandler();
                 var tokenDescriptor = new SecurityTokenDescriptor()
                 {
                     Subject = authClaims,
-                    Expires = DateTime.Now.AddDays(30),
-                    SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(_key), SecurityAlgorithms.HmacSha512Signature)
+                    Issuer = _appSettings.JwtIssuer,
+                    Audience = _appSettings.JwtAudience,
+                    Expires = DateTime.Now.AddDays(_appSettings.JwtExpireDays),
+                    SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha512Signature)
                 };
 
                 var token = tokenHandler.CreateToken(tokenDescriptor);
