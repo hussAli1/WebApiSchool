@@ -54,8 +54,10 @@ namespace WebApiSchool.Repository
             return await _table.AsNoTracking().ToListAsync();
         }
 
-        public async Task<TEntity> SelectById(object id) => await _table.FindAsync(id);
-        
+        public async Task<TEntity?> SelectByCondition(Expression<Func<TEntity, bool>> expression, bool trackChanges)  => 
+            !trackChanges ? await _table.Where(expression).AsNoTracking().FirstOrDefaultAsync()
+                          : await _table.Where(expression).FirstOrDefaultAsync();
+
 
         public void Update(TEntity entity)
         {

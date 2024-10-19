@@ -65,8 +65,8 @@ namespace WebApiSchool.Services
                 throw new ValidationException("اسم المستخدم موجود بالفعل");
             }
 
-            var role = Guid.Parse("F9F68922-9C6D-4142-BC8C-000AB06B5AB3");
-            var permissionGroup = await _unitOfWork.PermissionGroups.SelectById(role);
+            var roleGuid = Guid.Parse("F9F68922-9C6D-4142-BC8C-000AB06B5AB3");
+            var permissionGroup = await _unitOfWork.PermissionGroups.SelectByCondition(u => u.GUID.Equals(roleGuid), trackChanges: false);
             if (permissionGroup == null)
             {
                 throw new ValidationException("Invalid role or permission group.");

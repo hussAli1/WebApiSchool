@@ -1,6 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
 using WebApiSchool.DataAccess;
 using WebApiSchool.DataAccess.Entities;
+using WebApiSchool.DataAccess.Models;
 using WebApiSchool.Repository.Interfaces;
 
 namespace WebApiSchool.Repository
@@ -25,27 +27,12 @@ namespace WebApiSchool.Repository
             .Take(pageSize)
             .OrderBy(p=>p.CreatedAt)
             .ToListAsync();
-
         }
-
-        public async Task<int> SearchCountAsync(string search)
-        {
-            var query = _dbContext.Posts.AsQueryable();
-
-            if (!string.IsNullOrEmpty(search))
-            {
-                query = query.Where(p => p.Title.Contains(search) || p.Content.Contains(search));
-            }
-
-            return await query.CountAsync();
-        }
-        public async Task<Post?> SelectById(object id)
-        {
-            return await _dbContext.Posts
-                .AsNoTracking() 
-                .Include(p => p.Author) 
-                .FirstOrDefaultAsync(p => p.Id == (Guid)id); 
-        }
+        public async Task<Post?> SelectByCondition(Expression<Func<Post, bool>> expression, bool trackChanges) =>
+             !trackChanges ? await _dbContext.Posts.Where(expression).AsNoTracking()
+                                                  .Include(p => p.Author).FirstOrDefaultAsync()
+                           : await _dbContext.Posts.Where(expression)
+                                                  .Include(p => p.Author).FirstOrDefaultAsync();
 
     }
 }

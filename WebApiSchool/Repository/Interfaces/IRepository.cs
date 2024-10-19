@@ -8,7 +8,7 @@ namespace WebApiSchool.Repository.Interfaces
 
         Task<List<TEntity>> SelectAll();
 
-        Task<TEntity> SelectById(object id);
+        Task<TEntity> SelectByCondition(Expression<Func<TEntity, bool>> expression, bool trackChanges);
 
         Task CreateAsync(TEntity entity);
         Task CreateAsync(List<TEntity> entity);

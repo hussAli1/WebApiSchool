@@ -22,21 +22,19 @@ namespace WebApiSchool.Controllers
     [ApiController]
     public class PostsController : BaseController
     {
-        private readonly IRepository<Course> _repository;
         private readonly ILoggerManager _logger;
         private readonly ResponseModel _responseModel;
         private readonly IMapper _mapper;
         private readonly IPostsService _postsService;
         private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public PostsController(IRepository<Course> repository,
+        public PostsController(
                 ILoggerManager logger,
                 IMapper mapper,
                 ResponseModel responseModel,
                 IPostsService postsService,
                 IHttpContextAccessor httpContextAccessor)
         {
-            _repository = repository;
             _logger = logger;
             _responseModel = responseModel;
             _mapper = mapper;

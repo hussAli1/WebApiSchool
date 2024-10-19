@@ -47,7 +47,7 @@ namespace WebApiSchool.Services
         {
             try
             {
-                var post = await _unitOfWork.Posts.SelectById(id);
+                var post = await _unitOfWork.Posts.SelectByCondition(p => p.Id.Equals(id), trackChanges: false);
 
                 if (post == null) return false;
                 
@@ -66,7 +66,7 @@ namespace WebApiSchool.Services
 
         public async Task<Post> GetByIdAsync(Guid id)
         {
-            var post = await _unitOfWork.Posts.SelectById(id);
+            var post = await _unitOfWork.Posts.SelectByCondition(p => p.Id.Equals(id), trackChanges: false);
             return post;
         }
 
@@ -89,7 +89,7 @@ namespace WebApiSchool.Services
 
         public async Task<Post> UpdateAsync(Guid id, PostUpdateDTO postDTO)
         {
-            var existingPost = await _unitOfWork.Posts.SelectById(id);
+            var existingPost = await _unitOfWork.Posts.SelectByCondition(p=>p.Id.Equals(id),trackChanges:true);
 
             if (existingPost == null)
             {
@@ -97,13 +97,12 @@ namespace WebApiSchool.Services
             }
 
             var AuthorId = _requestService.GetUserGuid();
-            var auther = await _unitOfWork.Users.SelectById(Guid.Parse(AuthorId));
+            var auther = await _unitOfWork.Users.SelectByCondition(u=>u.GUID.Equals(Guid.Parse(AuthorId)) ,trackChanges:false);
 
             _mapper.Map(postDTO, existingPost);
             existingPost.AuthorId = auther.GUID;
             existingPost.Author = auther;
 
-            _unitOfWork.Posts.Update(existingPost);
             await _unitOfWork.CompleteAsync();
 
             return existingPost;
