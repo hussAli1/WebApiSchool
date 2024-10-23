@@ -96,13 +96,14 @@ namespace WebApiSchool.Services
                 throw new KeyNotFoundException($"Post with ID {id} not found.");
             }
 
-            var AuthorId = _requestService.GetUserGuid();
-            var auther = await _unitOfWork.Users.SelectByCondition(u=>u.GUID.Equals(Guid.Parse(AuthorId)) ,trackChanges:false);
+            //var AuthorId = _requestService.GetUserGuid();
+            //var auther = await _unitOfWork.Users.SelectByCondition(u=>u.GUID.Equals(Guid.Parse(AuthorId)) ,trackChanges:false);
 
             _mapper.Map(postDTO, existingPost);
-            existingPost.AuthorId = auther.GUID;
-            existingPost.Author = auther;
+            //existingPost.AuthorId = auther.GUID;
+            //existingPost.Author = auther;
 
+            _unitOfWork.Posts.Update(existingPost);
             await _unitOfWork.CompleteAsync();
 
             return existingPost;
